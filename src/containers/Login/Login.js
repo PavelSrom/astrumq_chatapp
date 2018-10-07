@@ -44,12 +44,7 @@ class Login extends Component {
 	onLogin = event => {
 		event.preventDefault();
 		if (this.checkForBlankInputs()){
-			const authData = {
-				email: this.state.emailInput,
-				password: this.state.passwordInput
-			}
-			
-			firebase.auth().signInWithEmailAndPassword(authData.email, authData.password)
+			firebase.auth().signInWithEmailAndPassword(this.state.emailInput, this.state.passwordInput)
 				.catch(error => alert(error.message));
 		}
 	};

@@ -4,7 +4,7 @@ import './Form.css';
 
 const form = props => (
     <div className="FormCard">
-        <div className="avatar center"></div>
+        <div className="avatar center"/>
         <div className="form">
             <div className="header">
                 {props.header}
@@ -21,6 +21,7 @@ const form = props => (
 )
 
 form.propTypes = {
+	// Optional text that's under the avatar
 	header: PropTypes.string,
 	submitted: PropTypes.func,
 	children: PropTypes.node

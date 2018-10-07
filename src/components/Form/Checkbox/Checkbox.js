@@ -13,6 +13,7 @@ const checkbox = props => (
 );
 
 checkbox.propTypes = {
+	// Some text value next to checkbox
 	description: PropTypes.string
 }
 

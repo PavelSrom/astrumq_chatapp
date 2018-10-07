@@ -11,6 +11,14 @@ class Register extends Component {
 	    passwordInput: '',
 	    passwordConfirmationInput: ''
     }
+	
+	componentDidMount() {
+		firebase.auth().onAuthStateChanged(user => {
+			if (user) {
+				this.props.history.push('/chat');
+			}
+		})
+	}
     
     inputChanged = event => {
     	const inputName = event.target.name + 'Input';
@@ -62,8 +70,6 @@ class Register extends Component {
 				      messages: 0,
 				      email: authData.email
 			      })
-				    
-				    this.props.history.push('/chat');
 			    })
 			    .catch(error => {
 		    	  alert(error.message);

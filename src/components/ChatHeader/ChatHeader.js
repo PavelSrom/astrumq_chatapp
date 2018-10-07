@@ -22,7 +22,10 @@ const chatHeader = props => (
 );
 
 chatHeader.propTypes = {
+	// User email that is taken from the currently logged user
 	userEmail: PropTypes.string,
+	
+	// Event which will sign the user out and redirect the web app on the login screen
 	onSignOut: PropTypes.func
 }
 

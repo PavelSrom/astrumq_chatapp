@@ -19,22 +19,32 @@ class Chat extends Component {
 	}
 	
 	componentDidMount() {
-				firebase.auth().onAuthStateChanged(currentUser => {
-					if (currentUser) {
-						this.setState({loggedUser: currentUser.email})
-						
-						const firebaseRef = firebase.database().ref('messages');
-						
-						firebaseRef.on('child_added', snapshot => {
-							const newMessage = snapshot.val();
-							const oldMessages = [...this.state.messages];
-							this.setState({
-								messages: oldMessages.concat([newMessage]),
-								loadingMessages: false
-							});
-						})
-					}
-				});
+		this.checkForLoggedUser();
+	}
+	
+	checkForLoggedUser() {
+		firebase.auth().onAuthStateChanged(currentUser => {
+			if (currentUser) {
+				this.setState({loggedUser: currentUser.email})
+				this.registerOnMessageAddedHandler();
+			}
+		});
+	}
+	
+	registerOnMessageAddedHandler() {
+		const firebaseRef = firebase.database().ref('messages');
+		
+		firebaseRef.on('child_added', snapshot => {
+			this.onMessageAdded(snapshot.val());
+		})
+	}
+	
+	onMessageAdded(message) {
+		const oldMessages = [...this.state.messages];
+		this.setState({
+			messages: oldMessages.concat([message]),
+			loadingMessages: false
+		});
 	}
 	
 	sendMessage = event => {
@@ -48,18 +58,20 @@ class Chat extends Component {
 		
 		firebase.database().ref('messages').push(dataToSend)
 			.then(() => {
-				
-				firebase.database().ref('users').child(firebase.auth().currentUser.uid).once('value', snapshot => {
-					const currentUser = snapshot.val();
-					const messagesNumber = currentUser.messages;
-					
-					firebase.database().ref('users').child(firebase.auth().currentUser.uid).update({
-						messages: messagesNumber + 1
-					})
-				});
+				this.updateUsersMessageCounter();
+				this.setState({messageInput: ''});
 			});
-		
-		this.setState({messageInput: ''})
+	}
+	
+	updateUsersMessageCounter() {
+		firebase.database().ref('users').child(firebase.auth().currentUser.uid).once('value', snapshot => {
+			const currentUser = snapshot.val();
+			const messagesNumber = currentUser.messages;
+			
+			firebase.database().ref('users').child(firebase.auth().currentUser.uid).update({
+				messages: messagesNumber + 1
+			})
+		});
 	}
 	
 	messageChanged = event => {

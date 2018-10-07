@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './ChatWindow.css';
-import ChatInputPanel from "../ChatInputPanel/ChatInputPanel";
 
 const chatWindow = props => (
 	<div className="ChatWindow">

@@ -18,8 +18,13 @@ const chatInputPanel = props => (
 );
 
 chatInputPanel.propTypes = {
+	// Message is the currently inputted value
 	message: PropTypes.string,
+	
+	// Event which will send date to the firebase database
 	sendMessage: PropTypes.func,
+	
+	// Handler that changes current input value
 	messageChanged: PropTypes.func
 }
 

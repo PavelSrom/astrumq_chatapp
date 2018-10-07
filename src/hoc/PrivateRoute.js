@@ -12,7 +12,7 @@ const privateRoute = ({component: Component, ...rest}) => {
 };
 
 privateRoute.propTypes = {
-	component: PropTypes.element,
+	component: PropTypes.func,
 	isUserAuthenticated: PropTypes.bool
 }
 

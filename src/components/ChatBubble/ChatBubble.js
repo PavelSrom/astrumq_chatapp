@@ -30,12 +30,18 @@ const chatBubble = props => {
 };
 
 chatBubble.propTypes = {
+	// Event handler that gets fired when user clicks an author's email
 	onGetUserInfo: PropTypes.func,
+	
+	// Message received from firebase realtime database
 	message: PropTypes.shape({
 		author: PropTypes.string,
 		message: PropTypes.string,
 		timeAdded: PropTypes.number
 	}),
+	
+	// Defines type of message.
+	// Sent message is aligned to the right, otherwise to the left
 	type: PropTypes.oneOf(['sent', 'received'])
 }
 
