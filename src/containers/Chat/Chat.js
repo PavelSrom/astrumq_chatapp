@@ -23,6 +23,7 @@ class Chat extends Component {
 	}
 	
 	checkForLoggedUser() {
+		// Set logged user to state and register event handler for new messages
 		firebase.auth().onAuthStateChanged(currentUser => {
 			if (currentUser) {
 				this.setState({loggedUser: currentUser.email})
@@ -40,6 +41,7 @@ class Chat extends Component {
 	}
 	
 	onMessageAdded(message) {
+		// Concat new messages with the old ones
 		const oldMessages = [...this.state.messages];
 		this.setState({
 			messages: oldMessages.concat([message]),
@@ -56,6 +58,7 @@ class Chat extends Component {
 			timeAdded: new Date().getTime()
 		};
 		
+		// Send message to firebase database, clear the input and update user's counter to +1
 		firebase.database().ref('messages').push(dataToSend)
 			.then(() => {
 				this.updateUsersMessageCounter();
@@ -90,10 +93,13 @@ class Chat extends Component {
 	}
 	
 	getUserInfo = email => {
+		// Get user information from firebase database by its email
 		firebase.database().ref('users')
 			.orderByChild('email')
 			.equalTo(email)
 			.once('value').then(data => {
+				// Returned JSON contains unique ID as key by default, so we have to extract information with Object.values
+				// Not an ideal solutions
 				const user = Object.values(data.val())[0];
 				alert(`Email: ${user.email}\nDatum registrace: ${new Date(user.registrationTime).toLocaleDateString('cs-ez')}\nPocet zprav: ${user.messages}`)
 			});
