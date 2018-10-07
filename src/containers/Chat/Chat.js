@@ -6,8 +6,8 @@ import ChatHeader from '../../components/ChatHeader/ChatHeader';
 import ChatWindow from "../../components/ChatWindow/ChatWindow";
 import ChatInputPanel from "../../components/ChatInputPanel/ChatInputPanel";
 import ChatBubble from '../../components/ChatBubble/ChatBubble';
-
 import './Chat.css';
+import UserDetailModal from "../../components/UserDetailModal/UserDetailModal";
 
 class Chat extends Component {
 	
@@ -16,6 +16,8 @@ class Chat extends Component {
 		messageInput: '',
 		messages: [],
 		loadingMessages: true,
+		openedUserDetails: false,
+		clickedUser: null
 	}
 	
 	componentDidMount() {
@@ -127,8 +129,16 @@ class Chat extends Component {
 				// Returned JSON contains unique ID as key by default, so we have to extract information with Object.values
 				// Not an ideal solutions
 				const user = Object.values(data.val())[0];
-				alert(`Email: ${user.email}\nDatum registrace: ${new Date(user.registrationTime).toLocaleDateString('cs-ez')}\nPocet zprav: ${user.messages}`)
+				
+				this.setState({ clickedUser: user, openedUserDetails: true });
+				
+				// Scroll to top
+				window.scrollTo(0, 0);
 			});
+	}
+	
+	onUserDetailsClosed = () => {
+		this.setState({ openedUserDetails: false });
 	}
 	
 	render() {
@@ -141,6 +151,7 @@ class Chat extends Component {
 		
 		return (
 			<div className="Chat">
+				{this.state.openedUserDetails && <UserDetailModal user={this.state.clickedUser} onUserDetailsClosed={this.onUserDetailsClosed}/>}
 				<ChatHeader userEmail={this.state.loggedUser} onSignOut={this.onSignOut}/>
 				<div className="container">
 					<ChatWindow>
