@@ -141,31 +141,58 @@ class Chat extends Component {
 		this.setState({ openedUserDetails: false });
 	}
 	
+	checkIfPreviousMessageHasSameSender(indexOfMessage) {
+		if(indexOfMessage > 0){
+			const thisMessage = this.state.messages[indexOfMessage];
+			const previousMessage = this.state.messages[indexOfMessage - 1];
+			
+			return thisMessage.author === previousMessage.author;
+		}
+		
+		return false;
+	}
+	
 	render() {
-		let messages = this.state.messages.map(message => {
+		let messages = this.state.messages.map((message, index) => {
 			const typeOfMessage = message.author === this.state.loggedUser ? 'sent' : 'received';
+			const doesPreviousMessageHaveSameSender = this.checkIfPreviousMessageHasSameSender(index);
+			
 			return (
-				<ChatBubble key={uuid()} message={message} type={typeOfMessage} onGetUserInfo={this.getUserInfo}/>
+				<ChatBubble key={uuid()} message={message} type={typeOfMessage} onGetUserInfo={this.getUserInfo} previousMessageSameSender={doesPreviousMessageHaveSameSender}/>
 			)
 		});
 		
 		return (
 			<div className="Chat">
-				{this.state.openedUserDetails && <UserDetailModal user={this.state.clickedUser} onUserDetailsClosed={this.onUserDetailsClosed}/>}
-				<ChatHeader userEmail={this.state.loggedUser} onSignOut={this.onSignOut}/>
+				<ChatHeader
+					userEmail={this.state.loggedUser}
+					onSignOut={this.onSignOut}
+				/>
 				<div className="container">
 					<ChatWindow>
 						<div id="chat">
 							<div>
-								<Loader loaded={!this.state.loadingMessages} options={{position: 'relative', top: '0'}}>
+								<Loader
+									loaded={!this.state.loadingMessages}
+									options={{position: 'relative', top: '0'}}
+								>
 									{messages}
 								</Loader>
 							</div>
 						</div>
-						<ChatInputPanel messageChanged={this.messageChanged} sendMessage={this.sendMessage}
-						                message={this.state.messageInput}/>
+						<ChatInputPanel
+							messageChanged={this.messageChanged}
+							sendMessage={this.sendMessage}
+							message={this.state.messageInput}
+						/>
 					</ChatWindow>
 				</div>
+				{this.state.openedUserDetails &&
+					<UserDetailModal
+						user={this.state.clickedUser}
+						onUserDetailsClosed={this.onUserDetailsClosed}
+					/>
+				}
 			</div>
 		)
 	}

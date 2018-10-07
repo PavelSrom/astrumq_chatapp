@@ -3,3 +3,44 @@
     margin-right: auto;
     margin-left: auto;
 }
+
+.ChatWindow #chat {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.ChatWindow #chat .right.col-md-9 {
+    text-align: right;
+}
+
+.ChatWindow #chat .user-detail {
+    color: #870007;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 25px;
+    margin-bottom: 8px;
+    display: inline-block;
+}
+
+.ChatWindow #chat .box .text {
+    display: inline-block;
+    width: auto;
+    padding: 18px;
+    border-radius: 7px;
+}
+
+.ChatWindow #chat .left .box .text {
+    background: #f5eee5;
+}
+
+.ChatWindow #chat .right .box .text {
+    background: #e8414a;
+    color: #fff;
+}
+
+.ChatWindow #chat .box .date {
+    color: #848484;
+    line-height: 30px;
+    margin-bottom: 25px;
+}

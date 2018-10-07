@@ -7,18 +7,23 @@ const chatBubble = props => {
 		type,
 		message,
 		onGetUserInfo,
+		previousMessageSameSender,
 		...attrs
 	} = props;
 	
 	return (
 		<div className="clearfix" {...attrs}>
 			<div className={`col-md-3 relative ${type === 'sent' ? 'right' : 'left'}`}>
+				{!previousMessageSameSender &&
 				<img className={`mrg-10 ${type === 'sent' ? 'left mgl-10' : 'right mgr-10'}`} src={avatar}
 				     alt=""/>
+				}
 			</div>
 			<div className={`col-md-9 ${type === 'sent' ? 'right' : 'left'}`}>
+				{!previousMessageSameSender &&
 				<div onClick={() => onGetUserInfo(message.author)}
 				     className="user-detail">{message.author}</div>
+				}
 				<div className="box">
 					<div className="text">{message.text}</div>
 					<div className="date">{new Date(message.timeAdded).toLocaleDateString('cs-cz')}</div>
