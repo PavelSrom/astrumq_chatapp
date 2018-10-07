@@ -27,15 +27,41 @@ class Chat extends Component {
 		firebase.auth().onAuthStateChanged(currentUser => {
 			if (currentUser) {
 				this.setState({loggedUser: currentUser.email})
-				this.registerOnMessageAddedHandler();
+				this.fetchAllMessages();
 			}
 		});
+	}
+	
+	/*
+		* 7. Oct. 2018 6:40 PM - Changed logic of fetching initial messages.
+		*
+		* - Use of .on('child_added') is inefficient, because if there is initially 10000 messages in the database
+		* then this event is called 10000x and it can lead to performance issues later.
+		*
+		* Better solution is to fetch all messages by using .once('value'), remove last element
+		* and then register .on('child_added') limited to last element.
+	 */
+	
+	fetchAllMessages() {
+		const firebaseRef = firebase.database().ref('messages');
+		
+		// Fetch initial messages
+		firebaseRef.once('value', snapshot => {
+			const messages = Object.values(snapshot.val());
+			const messagesWithoutLastOne = messages.slice(0, messages.length - 1);
+			
+			// Set initial messages
+			this.setState({ messages: messagesWithoutLastOne }, () => {
+				this.registerOnMessageAddedHandler()
+			});
+		})
 	}
 	
 	registerOnMessageAddedHandler() {
 		const firebaseRef = firebase.database().ref('messages');
 		
-		firebaseRef.on('child_added', snapshot => {
+		// Listen to new messages
+		firebaseRef.limitToLast(1).on('child_added', snapshot => {
 			this.onMessageAdded(snapshot.val());
 		})
 	}
