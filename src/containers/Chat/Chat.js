@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Loader from 'react-loader';
 import uuid from 'uuid/v4';
+import NotificationSystem from 'react-notification-system';
 import firebase from '../../fire';
 import ChatHeader from '../../components/ChatHeader/ChatHeader';
 import ChatWindow from "../../components/ChatWindow/ChatWindow";
@@ -20,7 +21,13 @@ class Chat extends Component {
 		clickedUser: null
 	}
 	
+	constructor(props) {
+		super(props);
+		this.notificationSystem = null;
+	}
+	
 	componentDidMount() {
+		this.notificationSystem = this.refs.notificationSystem;
 		this.checkForLoggedUser();
 	}
 	
@@ -48,7 +55,7 @@ class Chat extends Component {
 		const firebaseRef = firebase.database().ref('messages');
 		
 		// Fetch initial messages
-		firebaseRef.once('value', snapshot => {
+		firebaseRef.once('value').then(snapshot => {
 			const messages = Object.values(snapshot.val());
 			const messagesWithoutLastOne = messages.slice(0, messages.length - 1);
 			
@@ -91,6 +98,13 @@ class Chat extends Component {
 			.then(() => {
 				this.updateUsersMessageCounter();
 				this.setState({messageInput: ''});
+				
+				// Send simple notification
+				this.notificationSystem.addNotification({
+					message: 'Zpráva byla úspěšně odeslána',
+					level: 'success',
+					position: 'br'
+				})
 			});
 	}
 	
@@ -164,6 +178,7 @@ class Chat extends Component {
 		
 		return (
 			<div className="Chat">
+				<NotificationSystem ref="notificationSystem"/>
 				<ChatHeader
 					userEmail={this.state.loggedUser}
 					onSignOut={this.onSignOut}
