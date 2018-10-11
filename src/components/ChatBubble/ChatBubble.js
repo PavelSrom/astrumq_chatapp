@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import avatar from "../../images/avatar.png";
 
@@ -48,6 +48,6 @@ chatBubble.propTypes = {
 	// Defines type of message.
 	// Sent message is aligned to the right, otherwise to the left
 	type: PropTypes.oneOf(['sent', 'received'])
-}
+};
 
 export default chatBubble;

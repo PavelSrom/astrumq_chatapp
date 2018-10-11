@@ -10,6 +10,6 @@ const chatWindow = props => (
 
 chatWindow.propTypes = {
 	children: PropTypes.node
-}
+};
 
 export default chatWindow;

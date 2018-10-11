@@ -18,13 +18,13 @@ const form = props => (
             </form>
         </div>
     </div>
-)
+);
 
 form.propTypes = {
 	// Optional text that's under the avatar
 	header: PropTypes.string,
 	submitted: PropTypes.func,
 	children: PropTypes.node
-}
+};
 
 export default form;

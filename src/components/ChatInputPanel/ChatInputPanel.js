@@ -26,6 +26,6 @@ chatInputPanel.propTypes = {
 	
 	// Handler that changes current input value
 	messageChanged: PropTypes.func
-}
+};
 
 export default chatInputPanel;

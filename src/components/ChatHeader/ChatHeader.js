@@ -15,7 +15,7 @@ const chatHeader = props => (
 				<div className="left account">
 					{props.userEmail}
 				</div>
-				<span className="left"><div onClick={props.onSignOut} className="logout"></div></span>
+				<span className="left"><div onClick={props.onSignOut} className="logout"/></span>
 			</div>
 		</div>
 	</header>
@@ -27,6 +27,6 @@ chatHeader.propTypes = {
 	
 	// Event which will sign the user out and redirect the web app on the login screen
 	onSignOut: PropTypes.func
-}
+};
 
 export default chatHeader;

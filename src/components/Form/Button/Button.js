@@ -11,6 +11,6 @@ const button = props => (
 
 button.propTypes = {
 	children: PropTypes.node,
-}
+};
 
 export default button;

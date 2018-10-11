@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React, {Component} from 'react';
+import {Route, Switch} from 'react-router-dom';
 import Login from './containers/Login/Login';
 import Loader from 'react-loader';
 import firebase from './fire';
@@ -17,28 +17,28 @@ class App extends Component {
 	
 	componentDidMount() {
 		firebase.auth().onAuthStateChanged(user => {
-			if (user){
-				this.setState({ authUser: user, isUserAuthenticated: true, loading: false});
+			if (user) {
+				this.setState({authUser: user, isUserAuthenticated: true, loading: false});
 			} else {
-				this.setState({ authUser: null, isUserAuthenticated: false, loading: false});
+				this.setState({authUser: null, isUserAuthenticated: false, loading: false});
 			}
 		})
 	}
 	
-  render() {
-	 
-    return (
-      <div className="App">
-	      <Loader loaded={!this.state.loading} color="#FF0000">
-		      <Switch>
-			      <Route path="/" exact component={Login}/>
-			      <Route path="/register" exact component={Register}/>
-			      <PrivateRoute path="/chat" exact component={Chat} isUserAuthenticated={this.state.isUserAuthenticated} />
-		      </Switch>
-	      </Loader>
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div className="App">
+				<Loader loaded={!this.state.loading} color="#FF0000">
+					<Switch>
+						<Route path="/" exact component={Login}/>
+						<Route path="/register" exact component={Register}/>
+						<PrivateRoute path="/chat" exact component={Chat}
+						              isUserAuthenticated={this.state.isUserAuthenticated}/>
+					</Switch>
+				</Loader>
+			</div>
+		);
+	}
 }
 
 export default App;

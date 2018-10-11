@@ -19,7 +19,7 @@ class Chat extends Component {
 		loadingMessages: true,
 		openedUserDetails: false,
 		clickedUser: null
-	}
+	};
 	
 	constructor(props) {
 		super(props);
@@ -27,7 +27,7 @@ class Chat extends Component {
 	}
 	
 	componentDidMount() {
-		this.notificationSystem = this.refs.notificationSystem;
+		this.notificationSystem = React.createRef();
 		this.checkForLoggedUser();
 	}
 	
@@ -35,7 +35,7 @@ class Chat extends Component {
 		// Set logged user to state and register event handler for new messages
 		firebase.auth().onAuthStateChanged(currentUser => {
 			if (currentUser) {
-				this.setState({loggedUser: currentUser.email})
+				this.setState({loggedUser: currentUser.email});
 				this.fetchAllMessages();
 			}
 		});
@@ -106,10 +106,10 @@ class Chat extends Component {
 					position: 'br'
 				})
 			});
-	}
+	};
 	
 	updateUsersMessageCounter() {
-		firebase.database().ref('users').child(firebase.auth().currentUser.uid).once('value', snapshot => {
+		firebase.database().ref('users').child(firebase.auth().currentUser.uid).once('value').then(snapshot => {
 			const currentUser = snapshot.val();
 			const messagesNumber = currentUser.messages;
 			
@@ -121,18 +121,18 @@ class Chat extends Component {
 	
 	messageChanged = event => {
 		this.setState({messageInput: event.target.value});
-	}
+	};
 	
 	onSignOut = () => {
 		firebase.auth().signOut()
 			.then(() => {
-				alert("You have been logged out successfully");
+				alert("You have been successfully logged out");
 				this.props.history.push('/')
 			})
 			.catch(error => {
 				alert(error.message);
 			})
-	}
+	};
 	
 	getUserInfo = email => {
 		// Get user information from firebase database by its email
@@ -149,11 +149,11 @@ class Chat extends Component {
 				// Scroll to top
 				window.scrollTo(0, 0);
 			});
-	}
+	};
 	
 	onUserDetailsClosed = () => {
 		this.setState({ openedUserDetails: false });
-	}
+	};
 	
 	checkIfPreviousMessageHasSameSender(indexOfMessage) {
 		if(indexOfMessage > 0){
@@ -178,7 +178,7 @@ class Chat extends Component {
 		
 		return (
 			<div className="Chat">
-				<NotificationSystem ref="notificationSystem"/>
+				<NotificationSystem ref={this.notificationSystem}/>
 				<ChatHeader
 					userEmail={this.state.loggedUser}
 					onSignOut={this.onSignOut}

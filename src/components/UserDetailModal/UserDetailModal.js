@@ -43,7 +43,7 @@ const userDetailModal = props => {
 			<Overlay onClick={onUserDetailsClosed} />
 			</div>
 	);
-}
+};
 
 userDetailModal.propTypes = {
 	user: PropTypes.shape({
@@ -52,6 +52,6 @@ userDetailModal.propTypes = {
 		registrationTime: PropTypes.number
 	}).isRequired,
 	onUserDetailsClosed: PropTypes.func.isRequired
-}
+};
 
 export default userDetailModal;
