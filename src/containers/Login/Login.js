@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import firebase from '../../fire';
-import Header from '../../components/DefaultHeader/DefaultHeader';
-import Form from '../../components/Form/Form';
-import Input from '../../components/Form/Input/Input';
-import Checkbox from '../../components/Form/Checkbox/Checkbox';
-import Button from '../../components/Form/Button/Button';
+import Header from '../../components/default-header/DefaultHeader';
+import Form from '../../components/form/Form';
+import Input from '../../components/form/input/Input';
+import Checkbox from '../../components/form/checkbox/Checkbox';
+import Button from '../../components/form/button/Button';
 
 class Login extends Component {
 	state = {

@@ -3,12 +3,12 @@ import Loader from 'react-loader';
 import uuid from 'uuid/v4';
 import NotificationSystem from 'react-notification-system';
 import firebase from '../../fire';
-import ChatHeader from '../../components/ChatHeader/ChatHeader';
-import ChatWindow from "../../components/ChatWindow/ChatWindow";
-import ChatInputPanel from "../../components/ChatInputPanel/ChatInputPanel";
-import ChatBubble from '../../components/ChatBubble/ChatBubble';
+import ChatHeader from '../../components/chat-header/ChatHeader';
+import ChatWindow from "../../components/chat-window/ChatWindow";
+import ChatInputPanel from "../../components/chat-input-panel/ChatInputPanel";
+import ChatBubble from '../../components/chat-bubble/ChatBubble';
 import './Chat.css';
-import UserDetailModal from "../../components/UserDetailModal/UserDetailModal";
+import UserDetailModal from "../../components/user-detail-modal/UserDetailModal";
 
 class Chat extends Component {
 	

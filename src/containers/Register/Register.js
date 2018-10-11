@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import firebase from '../../fire';
-import DefaultHeader from '../../components/DefaultHeader/DefaultHeader';
-import Form from '../../components/Form/Form';
-import Input from '../../components/Form/Input/Input';
-import Button from '../../components/Form/Button/Button';
+import DefaultHeader from '../../components/default-header/DefaultHeader';
+import Form from '../../components/form/Form';
+import Input from '../../components/form/input/Input';
+import Button from '../../components/form/button/Button';
 
 class Register extends Component {
 	state = {
