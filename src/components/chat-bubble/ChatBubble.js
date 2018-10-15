@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import avatar from "../../images/avatar.png";
+import './ChatBubble.css';
 
 const chatBubble = props => {
 	const {
@@ -8,28 +10,62 @@ const chatBubble = props => {
 		message,
 		onGetUserInfo,
 		previousMessageSameSender,
-		...attrs
 	} = props;
 	
+	let timeAdded = new Date(message.timeAdded);
+	
+	// dd.mm.YYYY | HH:MM
+	timeAdded = `${timeAdded.getDay()}.${timeAdded.getMonth()}.${timeAdded.getFullYear()} | ${timeAdded.getHours()}:${timeAdded.getMinutes()}`;
+	
+	const chatBubbleClassnames = {
+		'chatBubble': classNames(
+			'chatBubble',
+			{
+				'chatBubble--sent': type === 'sent',
+				'chatBubble--received': type === 'received'
+			}
+		),
+		
+		'chatBubbleContent': classNames(
+			'chatBubble__content',
+			{
+				'chatBubble__content--sent': type === 'sent',
+				'chatBubble__content--received': type === 'received'
+			}
+		),
+		
+		'chatBubbleAvatar': classNames(
+			'chatBubble__avatar',
+			{
+				'chatBubble__avatar--hidden': previousMessageSameSender
+			}
+		),
+		
+		'chatBubbleMessage': classNames(
+			'chatBubble__message',
+			{
+				'chatBubble__message--sent': type === 'sent',
+				'chatBubble__message--received': type === 'received'
+			}
+		),
+		
+		'chatBubbleAuthor': classNames(
+			'chatBubble__author',
+			{
+				'chatBubble__author--no-display': previousMessageSameSender
+			}
+		)
+	};
+	
 	return (
-		<div className="clearfix" {...attrs}>
-			<div className={`col-md-3 relative ${type === 'sent' ? 'right' : 'left'}`}>
-				{!previousMessageSameSender &&
-				<img className={`mrg-10 ${type === 'sent' ? 'left mgl-10' : 'right mgr-10'}`} src={avatar}
-				     alt=""/>
-				}
+		<div className={chatBubbleClassnames.chatBubble}>
+			<img src={avatar} className={chatBubbleClassnames.chatBubbleAvatar} alt=""/>
+			<div className={chatBubbleClassnames.chatBubbleContent}>
+				<span className={chatBubbleClassnames.chatBubbleAuthor}
+				      onClick={() => onGetUserInfo(message.author)}>{message.author}</span>
+				<span className={chatBubbleClassnames.chatBubbleMessage}>{message.text}</span>
+				<span className="chatBubble__date">{timeAdded}</span>
 			</div>
-			<div className={`col-md-9 ${type === 'sent' ? 'right' : 'left'}`}>
-				{!previousMessageSameSender &&
-				<div onClick={() => onGetUserInfo(message.author)}
-				     className="user-detail">{message.author}</div>
-				}
-				<div className="box">
-					<div className="text">{message.text}</div>
-					<div className="date">{new Date(message.timeAdded).toLocaleDateString('cs-cz')}</div>
-				</div>
-			</div>
-			<div className={`col-md-3 ${type === 'sent' ? 'left' : 'right'}`}/>
 		</div>
 	)
 };

@@ -1,39 +1,18 @@
-.ChatInputPanel {
-    background: #f2f2f2;
-    padding-top: 30px;
-    padding-bottom: 30px;
+.chatInputPanel {
+    display: flex;
+    flex-direction: row;
+    background-color: #f2f2f2;
+    padding: 30px;
     border-radius: 5px;
-    margin-bottom: 28px;
 }
 
-.ChatInputPanel textarea {
-    max-width: 74.5%;
-    width: 74.5%;
-    height: 20px;
-    padding: 6px 1%;
-    float: left;
-    border-radius: 2px;
-    border-color: #c2c2c2;
-    font-size: 14px;
-    line-height: 18px;
-}
-
-.ChatInputPanel input[type=submit] {
-    /*
-        These properties should in reusable button component
-    */
-    background: #e8414a;
-    color: #fff;
-    border: 0;
-    padding: 14px 30px;
-    border-radius: 3px;
-
-    width: 23%;
-    float: right;
-    padding-top: 9px;
-    padding-bottom: 9px;
+.chatInputPanel__button {
     text-transform: uppercase;
-    font-size: 14px;
+    background-color: #e8414a;
     font-weight: bold;
-    border-radius: 2px;
+    font-size: 14px;
+}
+
+.chatInputPanel__textarea {
+    height: calc(2.25rem + 2px) !important;
 }

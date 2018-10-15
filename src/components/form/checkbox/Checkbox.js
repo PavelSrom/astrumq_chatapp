@@ -1,15 +1,14 @@
 import React from 'react';
+import {FormGroup, Input, Label} from 'reactstrap';
 import PropTypes from 'prop-types';
 
 const checkbox = props => (
-    <tr>
-        <td>
-            <label htmlFor="">
-                <input type="checkbox" />
-                {props.description}
-            </label>
-        </td>
-    </tr>
+	<FormGroup row check>
+		<Label check>
+			<Input type="checkbox"/>
+			{props.description}
+		</Label>
+	</FormGroup>
 );
 
 checkbox.propTypes = {

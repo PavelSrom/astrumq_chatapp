@@ -25,7 +25,8 @@
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
     "react/prop-types": 0,
-    "strict": 0
+    "strict": 0,
+    "no-mixed-spaces-and-tabs": "off"
   },
   "parser": "babel-eslint",
   "env": {

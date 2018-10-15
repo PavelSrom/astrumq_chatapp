@@ -1,19 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {Button, Input} from 'reactstrap';
 import './ChatInputPanel.css';
 
 const chatInputPanel = props => (
-	<div className="ChatInputPanel row">
-		<div className="col-md-3 left">
-		
-		</div>
-		<div className="col-md-9 left">
-			<textarea placeholder="Vaše odpověď" onChange={props.messageChanged} value={props.message} />
-			<input type="submit" value="Odeslat" onClick={props.sendMessage} />
-		</div>
-		<div className="col-md-3 left">
-		
-		</div>
+	<div className="chatInputPanel">
+		<Input
+			className="chatInputPanel__textarea"
+			type="textarea" placeholder="Vaše odpověď"
+			onChange={props.messageChanged}
+			value={props.message}
+		/>
+		<Button
+			color="danger"
+			className="chatInputPanel__button"
+			onClick={props.sendMessage}
+		>
+			Odeslat
+		</Button>
 	</div>
 );
 

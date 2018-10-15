@@ -1,12 +1,13 @@
 import React from 'react';
+import {Button, FormGroup} from 'reactstrap';
 import PropTypes from 'prop-types';
 
 const button = props => (
-    <tr>
-        <td>
-            <button className="button" {...props}>{props.children}</button>
-        </td>
-    </tr>
+	<FormGroup row>
+		<Button {...props}>
+			{props.children}
+		</Button>
+	</FormGroup>
 );
 
 button.propTypes = {

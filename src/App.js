@@ -7,6 +7,7 @@ import './App.css';
 import Register from "./containers/Register/Register";
 import Chat from "./containers/Chat/Chat";
 import PrivateRoute from "./hoc/PrivateRoute";
+import {Container} from "reactstrap";
 
 class App extends Component {
 	state = {
@@ -28,14 +29,16 @@ class App extends Component {
 	render() {
 		return (
 			<div className="App">
-				<Loader loaded={!this.state.loading} color="#FF0000">
-					<Switch>
-						<Route path="/" exact component={Login}/>
-						<Route path="/register" exact component={Register}/>
-						<PrivateRoute path="/chat" exact component={Chat}
-						              isUserAuthenticated={this.state.isUserAuthenticated}/>
-					</Switch>
-				</Loader>
+				<Container fluid>
+					<Loader loaded={!this.state.loading} color="#FF0000">
+						<Switch>
+							<Route path="/" exact component={Login}/>
+							<Route path="/register" exact component={Register}/>
+							<PrivateRoute path="/chat" exact component={Chat}
+							              isUserAuthenticated={this.state.isUserAuthenticated}/>
+						</Switch>
+					</Loader>
+				</Container>
 			</div>
 		);
 	}

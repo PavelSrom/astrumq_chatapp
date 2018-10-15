@@ -55,13 +55,18 @@ class Login extends Component {
 				<Header/>
 				<div className="container">
 					<Form
-						header={<React.Fragment>Pro vstup je potřeba se přihlásit nebo <Link to="/register">registrovat</Link></React.Fragment>}
+						header={
+							<React.Fragment>
+								Pro vstup je potřeba se přihlásit nebo
+								<Link className="form__headerText--a" to="/register"> registrovat</Link>
+							</React.Fragment>
+						}
 						submitted={this.onLogin}
 					>
 						<Input onChange={this.inputChanged} name="email" value={this.state.emailInput} type="text" placeholder="E-mail"/>
 						<Input onChange={this.inputChanged} name="password" value={this.state.passwordInput} type="password" placeholder="Password"/>
 						<Checkbox description="Zapamatovat přihlášení"/>
-						<Button className="button">Přihlásit se</Button>
+						<Button color="danger">Přihlásit se</Button>
 					</Form>
 				</div>
 			</div>

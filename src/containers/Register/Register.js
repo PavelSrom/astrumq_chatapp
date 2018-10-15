@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
+import {Container} from "reactstrap";
 import firebase from '../../fire';
 import DefaultHeader from '../../components/default-header/DefaultHeader';
 import Form from '../../components/form/Form';
 import Input from '../../components/form/input/Input';
 import Button from '../../components/form/button/Button';
+import './Register.css';
 
 class Register extends Component {
 	state = {
@@ -81,18 +83,18 @@ class Register extends Component {
 	
 	render() {
 		return (
-			<div className="Register">
+			<div className="registration">
 				<DefaultHeader/>
-				<div className="container">
+				<Container>
 					<Form submitted={this.onRegister}>
 						<Input onChange={this.inputChanged} type="text" name="email" placeholder="E-mail"/>
 						<Input onChange={this.inputChanged} type="password" name="password"
 						       placeholder="Heslo"/>
 						<Input onChange={this.inputChanged} type="password" name="passwordConfirmation"
 						       placeholder="Potvrzení hesla"/>
-						<Button>Zaregistrovat</Button>
+						<Button color="danger">Zaregistrovat</Button>
 					</Form>
-				</div>
+				</Container>
 			</div>
 		)
 	}

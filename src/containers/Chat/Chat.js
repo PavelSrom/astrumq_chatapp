@@ -9,6 +9,7 @@ import ChatInputPanel from "../../components/chat-input-panel/ChatInputPanel";
 import ChatBubble from '../../components/chat-bubble/ChatBubble';
 import './Chat.css';
 import UserDetailModal from "../../components/user-detail-modal/UserDetailModal";
+import {Container} from "reactstrap";
 
 class Chat extends Component {
 	
@@ -60,7 +61,7 @@ class Chat extends Component {
 			const messagesWithoutLastOne = messages.slice(0, messages.length - 1);
 			
 			// Set initial messages
-			this.setState({ messages: messagesWithoutLastOne }, () => {
+			this.setState({messages: messagesWithoutLastOne}, () => {
 				this.registerOnMessageAddedHandler()
 			});
 		})
@@ -140,23 +141,23 @@ class Chat extends Component {
 			.orderByChild('email')
 			.equalTo(email)
 			.once('value').then(data => {
-				// Returned JSON contains unique ID as key by default, so we have to extract information with Object.values
-				// Not an ideal solutions
-				const user = Object.values(data.val())[0];
-				
-				this.setState({ clickedUser: user, openedUserDetails: true });
-				
-				// Scroll to top
-				window.scrollTo(0, 0);
-			});
+			// Returned JSON contains unique ID as key by default, so we have to extract information with Object.values
+			// Not an ideal solutions
+			const user = Object.values(data.val())[0];
+			
+			this.setState({clickedUser: user, openedUserDetails: true});
+			
+			// Scroll to top
+			window.scrollTo(0, 0);
+		});
 	};
 	
 	onUserDetailsClosed = () => {
-		this.setState({ openedUserDetails: false });
+		this.setState({openedUserDetails: false});
 	};
 	
 	checkIfPreviousMessageHasSameSender(indexOfMessage) {
-		if(indexOfMessage > 0){
+		if (indexOfMessage > 0) {
 			const thisMessage = this.state.messages[indexOfMessage];
 			const previousMessage = this.state.messages[indexOfMessage - 1];
 			
@@ -172,7 +173,9 @@ class Chat extends Component {
 			const doesPreviousMessageHaveSameSender = this.checkIfPreviousMessageHasSameSender(index);
 			
 			return (
-				<ChatBubble key={uuid()} message={message} type={typeOfMessage} onGetUserInfo={this.getUserInfo} previousMessageSameSender={doesPreviousMessageHaveSameSender}/>
+				<ChatBubble key={uuid()} message={message} type={typeOfMessage}
+				            onGetUserInfo={this.getUserInfo}
+				            previousMessageSameSender={doesPreviousMessageHaveSameSender}/>
 			)
 		});
 		
@@ -183,30 +186,26 @@ class Chat extends Component {
 					userEmail={this.state.loggedUser}
 					onSignOut={this.onSignOut}
 				/>
-				<div className="container">
-					<ChatWindow>
-						<div id="chat">
-							<div>
-								<Loader
-									loaded={!this.state.loadingMessages}
-									options={{position: 'relative', top: '0'}}
-								>
-									{messages}
-								</Loader>
-							</div>
-						</div>
-						<ChatInputPanel
-							messageChanged={this.messageChanged}
-							sendMessage={this.sendMessage}
-							message={this.state.messageInput}
-						/>
-					</ChatWindow>
-				</div>
+				<Container fluid>
+					<Loader
+						loaded={!this.state.loadingMessages}
+						options={{position: 'relative', top: '0'}}
+					>
+						<ChatWindow>
+							{messages}
+							<ChatInputPanel
+								messageChanged={this.messageChanged}
+								sendMessage={this.sendMessage}
+								message={this.state.messageInput}
+							/>
+						</ChatWindow>
+					</Loader>
+				</Container>
 				{this.state.openedUserDetails &&
-					<UserDetailModal
-						user={this.state.clickedUser}
-						onUserDetailsClosed={this.onUserDetailsClosed}
-					/>
+				<UserDetailModal
+					user={this.state.clickedUser}
+					onUserDetailsClosed={this.onUserDetailsClosed}
+				/>
 				}
 			</div>
 		)
