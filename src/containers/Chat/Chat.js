@@ -22,13 +22,8 @@ class Chat extends Component {
 		clickedUser: null
 	};
 	
-	constructor(props) {
-		super(props);
-		this.notificationSystem = null;
-	}
-	
 	componentDidMount() {
-		this.notificationSystem = React.createRef();
+		this.notificationSystem = null;
 		this.checkForLoggedUser();
 	}
 	
@@ -180,8 +175,8 @@ class Chat extends Component {
 		});
 		
 		return (
-			<div className="Chat">
-				<NotificationSystem ref={this.notificationSystem}/>
+			<div className="chat">
+				<NotificationSystem ref={el => this.notificationSystem = el}/>
 				<ChatHeader
 					userEmail={this.state.loggedUser}
 					onSignOut={this.onSignOut}
