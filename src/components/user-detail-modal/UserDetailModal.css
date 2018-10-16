@@ -1,31 +1,30 @@
-.UserDetailModal {
+.userDetailModal__content {
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
     position: absolute;
     height: auto;
     width: 300px;
     top: 40%;
     left: 40%;
-    display: block;
 }
 
-.UserDetailModal #userDetails {
-    position: relative;
-    z-index: 100;
-    background: #fff;
-    text-align: center;
-    padding-bottom: 13px;
-    border-radius: 4px;
+.userDetailModal__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #e8414a;
+    color: white;
 }
 
-.UserDetailModal #userDetails .header {
-    background: #e8414a;
-    color: #fff;
-    padding-bottom: 15px;
-    margin-bottom: 35px;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
+.userDetailModal__info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
 }
 
-.UserDetailModal #userDetails .header img {
+.userDetailModal__avatar {
     height: 128px;
     width: 128px;
     margin-top: -64px;
@@ -33,49 +32,28 @@
     margin-right: auto;
 }
 
-.UserDetailModal #userDetails .header .email {
-    padding-top: 20px;
+.userDetailModal__email {
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
-.UserDetailModal #userDetails .info div {
-    margin-top: 17px;
+.userDetailModal__innerContent {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    justify-content: space-between;
 }
 
-.UserDetailModal #userDetails .info .date-registered,
-.UserDetailModal #userDetails .info .message-count {
-    padding-right: 20px;
-    padding-left: 20px;
+.userDetailModal__innerContent:first-of-type {
+    margin-top: 10px;
 }
 
-.UserDetailModal #userDetails .info div b {
-    display: inline-block;
-    width: 48%;
-    margin-left: 2%;
-    text-align: left;
-    float: left;
+.userDetailModal__innerContent:last-of-type {
+    margin-bottom: 10px;
 }
 
-.UserDetailModal #userDetails .info div span {
-    width: 43%;
-    margin-left: 7%;
-    text-align: left;
-    float: left;
-}
-
-.UserDetailModal #userDetails div.close {
-    height: 39px;
-    max-width: 80px;
-    line-height: 40px;
-    padding-left: 40px;
-    padding-right: 40px;
-    background: #ededed;
-    color: #828282;
-    margin: 32px auto 14px;
-    cursor: pointer;
-}
-
-.UserDetailModal #userDetails div.close:hover {
-    background-color: #929191;
-    transition: background-color 300ms linear;
-    color: #fff;
+.userDetailModal__close {
+    width: 50%;
+    justify-content: center;
 }

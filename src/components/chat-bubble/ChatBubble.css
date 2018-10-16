@@ -1,6 +1,6 @@
 .chatBubble {
     display: flex;
-    margin-bottom: 12px;
+    margin-bottom: 24px;
 }
 
 .chatBubble__avatar {

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {Button} from 'reactstrap';
 import avatar from '../../images/avatar.png';
 import './UserDetailModal.css';
 import Overlay from "../overlay/Overlay";
@@ -18,26 +19,25 @@ const userDetailModal = props => {
 	} = user;
 	
 	return (
-		<div className="UserDetailModal" {...attrs}>
-			<div id="userDetails">
-				<div className="header">
-					<img src={avatar} alt=""/>
-					<div className="email">{email}</div>
+		<div className="userDetailModal" {...attrs}>
+			<div className="userDetailModal__content">
+				<div className="userDetailModal__header">
+					<img className="userDetailModal__avatar" src={avatar} alt=""/>
+					<div className="userDetailModal__email">{email}</div>
 				</div>
-				<div className="info">
-					<div className="date-registered">
+				<div className="userDetailModal__info">
+					<div className="userDetailModal__innerContent userDetailModal__registrationDate">
 						<b>Datum registrace:</b>
 						<span>{new Date(registrationTime).toLocaleDateString('cs-cz')}</span>
 					</div>
-					<div className="clearfix"/>
-					<div className="message-count">
+					<div className="userDetailModal__innerContent userDetailModal__numberOfMessages">
 						<b>Počet zpráv:</b>
 						<span>{messages}</span>
 					</div>
-					<div className="clearfix"/>
-					<div className="close" onClick={onUserDetailsClosed}>
+					<Button className="userDetailModal__innerContent userDetailModal__close" color="secondary"
+					        onClick={onUserDetailsClosed}>
 						Zavřít
-					</div>
+					</Button>
 				</div>
 			</div>
 			<Overlay onClick={onUserDetailsClosed} />
