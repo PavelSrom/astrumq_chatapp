@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import logo from '../../images/logo_astrumq.png';
 import avatar from '../../images/avatar.png';
 import logout from '../../images/logout.png';
-import './ChatHeader.css';
 
 class ChatHeader extends Component {
 	state = {

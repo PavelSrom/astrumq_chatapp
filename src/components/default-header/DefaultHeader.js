@@ -1,5 +1,4 @@
 import React from 'react';
-import './DefaultHeader.css';
 import logo from '../../images/logo_astrumq.png';
 
 const defaultHeader = () => {

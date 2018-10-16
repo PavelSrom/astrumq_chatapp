@@ -1,0 +1,206 @@
+@import variables
+
+// Chat.js
+.chat
+  width: 90%
+  margin-left: auto
+  margin-right: auto
+
+// ChatBubble.js
+
+.chatBubble
+  display: flex
+  margin-bottom: 24px
+
+.chatBubble__avatar
+  width: 64px
+  height: 64px
+
+.chatBubble__avatar--hidden
+  visibility: hidden
+
+.chatBubble--sent
+  flex-direction: row-reverse
+
+.chatBubble--received
+  flex-direction: row
+
+.chatBubble__content
+  display: flex
+  flex-direction: column
+  justify-content: flex-end
+
+.chatBubble__content--sent
+  align-items: flex-end
+  margin-right: 24px
+
+.chatBubble__content--received
+  align-items: flex-start
+  margin-left: 24px
+
+.chatBubble__author
+  color: $chat-bubble-author
+  font-weight: 600
+  cursor: pointer
+
+.chatBubble__author--no-display
+  display: none
+
+.chatBubble__message
+  padding: 18px
+  border-radius: 7px
+
+.chatBubble__message--sent
+  background-color: $red-background
+  color: white
+
+.chatBubble__message--received
+  background-color: $chat-bubble-received-background
+
+.chatBubble__date
+  color: $chat-bubble-date
+
+// ChatInputPanel.js
+
+.chatInputPanel
+  display: flex
+  flex-direction: row
+  background-color: $chat-input-panel-background
+  padding: 30px
+  border-radius: 5px
+
+.chatInputPanel__button
+  text-transform: uppercase
+  background-color: $red-background
+  font-weight: bold
+  font-size: 14px
+
+.chatInputPanel__textarea
+  height: calc(2.25rem + 2px) !important
+
+// ChatHeader.js
+
+.chatHeader__userEmail
+  line-height: 64px
+
+.chatHeader__userAvatar
+  border: 2px solid white
+  border-radius: 32px
+
+.chatHeader__logoutIcon
+  padding: 20px 0
+  cursor: pointer
+
+// ChatWindow.js
+
+.ChatWindow
+  width: 90%
+  margin-right: auto
+  margin-left: auto
+  margin-top: 15px
+  display: flex
+  flex-direction: column
+
+// Form.js
+
+.form
+  margin-top: 220px
+  box-shadow: -1px 5px 17px 0 #dcdcdc
+  margin-left: auto
+  margin-right: auto
+  padding: 0
+
+.form__header
+  background-color: $form-header-background
+  text-align: center
+
+.form__avatar
+  margin-top: -64px
+
+.form__headerText
+  padding-top: 32px
+  padding-bottom: 16px
+  color: white
+
+.form__headerText--a
+  text-decoration: underline
+  color: white
+
+.form__headerText--a:hover
+  color: white
+
+.form__container
+  width: 100%
+
+.form__input
+  padding-left: 15px
+  padding-right: 15px
+
+.form__content
+  display: flex
+  flex-direction: column
+  align-items: center
+
+// Overlay.js
+
+.Overlay
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  background: rgba(0, 0, 0, 0.5)
+  bottom: 0
+  z-index: 99
+
+// UserDetailModal.js
+
+.userDetailModal__content
+  display: flex
+  flex-direction: column
+  z-index: 100
+  position: absolute
+  height: auto
+  width: 300px
+  top: 40%
+  left: 40%
+
+.userDetailModal__header
+  display: flex
+  flex-direction: column
+  align-items: center
+  background-color: $red-background
+  color: white
+
+.userDetailModal__info
+  display: flex
+  flex-direction: column
+  align-items: center
+  background-color: white
+
+.userDetailModal__avatar
+  height: 128px
+  width: 128px
+  margin-top: -64px
+  margin-left: auto
+  margin-right: auto
+
+.userDetailModal__email
+  margin-top: 20px
+  margin-bottom: 20px
+
+.userDetailModal__innerContent
+  margin-bottom: 10px
+  display: flex
+  flex-direction: row
+  width: 80%
+  justify-content: space-between
+
+.userDetailModal__innerContent:first-of-type
+  margin-top: 10px
+
+.userDetailModal__innerContent:last-of-type
+  margin-bottom: 10px
+
+.userDetailModal__close
+  width: 50%
+  justify-content: center

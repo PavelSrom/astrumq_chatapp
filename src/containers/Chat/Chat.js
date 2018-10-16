@@ -7,7 +7,6 @@ import ChatHeader from '../../components/chat-header/ChatHeader';
 import ChatWindow from "../../components/chat-window/ChatWindow";
 import ChatInputPanel from "../../components/chat-input-panel/ChatInputPanel";
 import ChatBubble from '../../components/chat-bubble/ChatBubble';
-import './Chat.css';
 import UserDetailModal from "../../components/user-detail-modal/UserDetailModal";
 import {Container} from "reactstrap";
 
@@ -122,7 +121,10 @@ class Chat extends Component {
 	onSignOut = () => {
 		firebase.auth().signOut()
 			.then(() => {
-				alert("You have been successfully logged out");
+				this.notificationSystem.addNotification({
+					message: 'Byli jste úspěšně odhlášeni',
+					level: 'info'
+				});
 				this.props.history.push('/')
 			})
 			.catch(error => {

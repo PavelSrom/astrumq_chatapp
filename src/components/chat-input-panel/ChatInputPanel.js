@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Button, Input} from 'reactstrap';
-import './ChatInputPanel.css';
 
 const chatInputPanel = props => (
 	<div className="chatInputPanel">

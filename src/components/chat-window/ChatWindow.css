@@ -1,8 +1,0 @@
-.ChatWindow {
-    width: 90%;
-    margin-right: auto;
-    margin-left: auto;
-    margin-top: 15px;
-    display: flex;
-    flex-direction: column;
-}

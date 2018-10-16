@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+// Minimal date formater library, alternative to Moment.js
+import dayjs from 'dayjs';
+
 import avatar from "../../images/avatar.png";
-import './ChatBubble.css';
 
 const chatBubble = props => {
 	const {
@@ -12,10 +14,8 @@ const chatBubble = props => {
 		previousMessageSameSender,
 	} = props;
 	
-	let timeAdded = new Date(message.timeAdded);
-	
-	// dd.mm.YYYY | HH:MM
-	timeAdded = `${timeAdded.getDay()}.${timeAdded.getMonth()}.${timeAdded.getFullYear()} | ${timeAdded.getHours()}:${timeAdded.getMinutes()}`;
+	// day.month.year | hour.minute
+	const timeAdded = dayjs(message.timeAdded).format('DD.MM.YYYY | hh:mm');
 	
 	const chatBubbleClassnames = {
 		'chatBubble': classNames(

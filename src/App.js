@@ -3,7 +3,7 @@ import {Route, Switch} from 'react-router-dom';
 import Login from './containers/Login/Login';
 import Loader from 'react-loader';
 import firebase from './fire';
-import './App.css';
+import './App.sass';
 import Register from "./containers/Register/Register";
 import Chat from "./containers/Chat/Chat";
 import PrivateRoute from "./hoc/PrivateRoute";

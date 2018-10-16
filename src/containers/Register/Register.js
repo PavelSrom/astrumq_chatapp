@@ -5,7 +5,6 @@ import DefaultHeader from '../../components/default-header/DefaultHeader';
 import Form from '../../components/form/Form';
 import Input from '../../components/form/input/Input';
 import Button from '../../components/form/button/Button';
-import './Register.css';
 
 class Register extends Component {
 	state = {

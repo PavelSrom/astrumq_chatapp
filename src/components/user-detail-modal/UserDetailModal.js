@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Button} from 'reactstrap';
 import avatar from '../../images/avatar.png';
-import './UserDetailModal.css';
 import Overlay from "../overlay/Overlay";
 
 const userDetailModal = props => {
