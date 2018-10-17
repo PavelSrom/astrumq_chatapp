@@ -35,7 +35,7 @@ class App extends Component {
 							<Route path="/" exact component={Login}/>
 							<Route path="/register" exact component={Register}/>
 							<PrivateRoute path="/chat" exact component={Chat}
-							              isUserAuthenticated={this.state.isUserAuthenticated}/>
+														isUserAuthenticated={this.state.isUserAuthenticated}/>
 						</Switch>
 					</Loader>
 				</Container>

@@ -34,7 +34,7 @@ const userDetailModal = props => {
 						<span>{messages}</span>
 					</div>
 					<Button className="userDetailModal__innerContent userDetailModal__close" color="secondary"
-					        onClick={onUserDetailsClosed}>
+									onClick={onUserDetailsClosed}>
 						Zavřít
 					</Button>
 				</div>

@@ -26,7 +26,7 @@
     "react/jsx-uses-vars": "error",
     "react/prop-types": 0,
     "strict": 0,
-    "no-mixed-spaces-and-tabs": "off",
+    "no-mixed-spaces-and-tabs": "warn",
     "quotes": [
       "warn",
       "single"

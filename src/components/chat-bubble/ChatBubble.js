@@ -62,7 +62,7 @@ const chatBubble = props => {
 			<img src={avatar} className={chatBubbleClassnames.chatBubbleAvatar} alt=""/>
 			<div className={chatBubbleClassnames.chatBubbleContent}>
 				<span className={chatBubbleClassnames.chatBubbleAuthor}
-				      onClick={() => onGetUserInfo(message.author)}>{message.author}</span>
+							onClick={() => onGetUserInfo(message.author)}>{message.author}</span>
 				<span className={chatBubbleClassnames.chatBubbleMessage}>{message.text}</span>
 				<span className="chatBubble__date">{timeAdded}</span>
 			</div>

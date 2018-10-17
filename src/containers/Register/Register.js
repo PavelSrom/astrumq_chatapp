@@ -13,14 +13,6 @@ class Register extends Component {
 		passwordConfirmationInput: ''
 	};
 	
-	componentDidMount() {
-		firebase.auth().onAuthStateChanged(user => {
-			if (user) {
-				this.props.history.push('/chat');
-			}
-		})
-	}
-	
 	inputChanged = event => {
 		const inputName = event.target.name + 'Input';
 		
@@ -80,17 +72,38 @@ class Register extends Component {
 		event.preventDefault();
 	};
 	
+	componentDidMount() {
+		firebase.auth().onAuthStateChanged(user => {
+			if (user) {
+				this.props.history.push('/chat');
+			}
+		})
+	}
+	
 	render() {
 		return (
 			<div className="registration">
 				<DefaultHeader/>
 				<Container>
 					<Form submitted={this.onRegister}>
-						<Input onChange={this.inputChanged} type="text" name="email" placeholder="E-mail"/>
-						<Input onChange={this.inputChanged} type="password" name="password"
-						       placeholder="Heslo"/>
-						<Input onChange={this.inputChanged} type="password" name="passwordConfirmation"
-						       placeholder="Potvrzení hesla"/>
+						<Input
+							onChange={this.inputChanged}
+							type="text"
+							name="email"
+							placeholder="E-mail"
+						/>
+						<Input
+							onChange={this.inputChanged}
+							type="password"
+							name="password"
+							placeholder="Heslo"
+						/>
+						<Input
+							onChange={this.inputChanged}
+							type="password"
+							name="passwordConfirmation"
+							placeholder="Potvrzení hesla"
+						/>
 						<Button color="danger">Zaregistrovat</Button>
 					</Form>
 				</Container>

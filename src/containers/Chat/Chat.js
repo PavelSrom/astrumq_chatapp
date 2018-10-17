@@ -170,9 +170,13 @@ class Chat extends Component {
 			const doesPreviousMessageHaveSameSender = this.checkIfPreviousMessageHasSameSender(index);
 			
 			return (
-				<ChatBubble key={uuid()} message={message} type={typeOfMessage}
-				            onGetUserInfo={this.getUserInfo}
-				            previousMessageSameSender={doesPreviousMessageHaveSameSender}/>
+				<ChatBubble
+					key={uuid()}
+					message={message}
+					type={typeOfMessage}
+					onGetUserInfo={this.getUserInfo}
+					previousMessageSameSender={doesPreviousMessageHaveSameSender}
+				/>
 			)
 		});
 		
