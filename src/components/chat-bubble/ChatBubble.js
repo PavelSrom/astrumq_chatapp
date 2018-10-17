@@ -4,7 +4,7 @@ import classNames from 'classnames';
 // Minimal date formater library, alternative to Moment.js
 import dayjs from 'dayjs';
 
-import avatar from "../../images/avatar.png";
+import avatar from '../../images/avatar.png';
 
 const chatBubble = props => {
 	const {

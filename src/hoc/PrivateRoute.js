@@ -1,5 +1,5 @@
 import React from 'react';
-import {Redirect, Route} from "react-router";
+import {Redirect, Route} from 'react-router';
 import PropTypes from 'prop-types';
 
 const privateRoute = ({component: Component, ...rest}) => {

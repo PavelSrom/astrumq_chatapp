@@ -4,10 +4,10 @@ import Login from './containers/Login/Login';
 import Loader from 'react-loader';
 import firebase from './fire';
 import './App.sass';
-import Register from "./containers/Register/Register";
-import Chat from "./containers/Chat/Chat";
-import PrivateRoute from "./hoc/PrivateRoute";
-import {Container} from "reactstrap";
+import Register from './containers/Register/Register';
+import Chat from './containers/Chat/Chat';
+import PrivateRoute from './hoc/PrivateRoute';
+import {Container} from 'reactstrap';
 
 class App extends Component {
 	state = {

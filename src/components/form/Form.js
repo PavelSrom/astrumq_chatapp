@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Col, Form} from "reactstrap";
+import {Col, Form} from 'reactstrap';
 import avatar from '../../images/avatar_big.png';
 
 const form = props => (

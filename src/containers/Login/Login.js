@@ -31,10 +31,10 @@ class Login extends Component {
 		let isValid = true;
 		
 		if (!this.state.emailInput) {
-			alert("Zadejte email");
+			alert('Zadejte email');
 			isValid = false;
 		} else if (!this.state.passwordInput) {
-			alert("Zadejte heslo");
+			alert('Zadejte heslo');
 			isValid = false;
 		}
 		

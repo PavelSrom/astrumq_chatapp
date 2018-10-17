@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container} from "reactstrap";
+import {Container} from 'reactstrap';
 import firebase from '../../fire';
 import DefaultHeader from '../../components/default-header/DefaultHeader';
 import Form from '../../components/form/Form';
@@ -31,15 +31,15 @@ class Register extends Component {
 		let isValid = true;
 		
 		if (!this.state.emailInput) {
-			alert("Zadejte email");
+			alert('Zadejte email');
 			isValid = false;
 		}
 		else if (!this.state.passwordInput) {
-			alert("Zadejte heslo");
+			alert('Zadejte heslo');
 			isValid = false;
 		}
 		else if (!this.state.passwordConfirmationInput) {
-			alert("Zadejte oveřovací heslo");
+			alert('Zadejte oveřovací heslo');
 			isValid = false;
 		}
 		
@@ -48,7 +48,7 @@ class Register extends Component {
 	
 	passwordsMatch = () => {
 		if (this.state.passwordInput !== this.state.passwordConfirmationInput) {
-			alert("Ověřovací heslo není stejné");
+			alert('Ověřovací heslo není stejné');
 			return false;
 		}
 		
