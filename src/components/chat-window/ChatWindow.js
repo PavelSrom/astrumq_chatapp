@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const chatWindow = props => (
-	<div className="ChatWindow">
+	<div className="chatWindow">
 		{props.children}
 	</div>
 );

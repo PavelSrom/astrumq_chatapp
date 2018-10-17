@@ -104,7 +104,7 @@ class Register extends Component {
 							name="passwordConfirmation"
 							placeholder="Potvrzení hesla"
 						/>
-						<Button color="danger">Zaregistrovat</Button>
+						<Button className="form__button--to-black" color="danger">Zaregistrovat</Button>
 					</Form>
 				</Container>
 			</div>

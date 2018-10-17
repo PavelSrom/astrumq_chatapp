@@ -20,7 +20,7 @@ class ChatHeader extends Component {
 				color="light"
 				light
 				expand="md"
-				className="chatHeader"
+				className="chatHeader header"
 			>
 				<NavbarBrand href="/chat">
 					<img src={logo} alt=""/>

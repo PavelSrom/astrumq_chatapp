@@ -2,13 +2,15 @@ import React, {Component} from 'react';
 import Loader from 'react-loader';
 import uuid from 'uuid/v4';
 import NotificationSystem from 'react-notification-system';
+import {Container} from 'reactstrap';
+import Pagination from 'rc-pagination';
 import firebase from '../../fire';
 import ChatHeader from '../../components/chat-header/ChatHeader';
 import ChatWindow from '../../components/chat-window/ChatWindow';
 import ChatInputPanel from '../../components/chat-input-panel/ChatInputPanel';
 import ChatBubble from '../../components/chat-bubble/ChatBubble';
 import UserDetailModal from '../../components/user-detail-modal/UserDetailModal';
-import {Container} from 'reactstrap';
+import 'rc-pagination/dist/rc-pagination.min.css'
 
 class Chat extends Component {
 	
@@ -18,7 +20,9 @@ class Chat extends Component {
 		messages: [],
 		loadingMessages: true,
 		openedUserDetails: false,
-		clickedUser: null
+		clickedUser: null,
+		messagesPerPage: 10,
+		totalNumberOfMessages: 0
 	};
 	
 	componentDidMount() {
@@ -31,41 +35,64 @@ class Chat extends Component {
 		firebase.auth().onAuthStateChanged(currentUser => {
 			if (currentUser) {
 				this.setState({loggedUser: currentUser.email});
-				this.fetchAllMessages();
+				this.fetchMessages();
+				this.fetchNumberOfMessages();
 			}
 		});
 	}
 	
 	/*
 		* 7. Oct. 2018 6:40 PM - Changed logic of fetching initial messages.
-		*
+		
 		* - Use of .on('child_added') is inefficient, because if there is initially 10000 messages in the database
 		* then this event is called 10000x and it can lead to performance issues later.
-		*
+		
 		* Better solution is to fetch all messages by using .once('value'), remove last element
 		* and then register .on('child_added') limited to last element.
 	 */
 	
-	fetchAllMessages() {
-		const firebaseRef = firebase.database().ref('messages');
+	fetchMessages() {
+		const messagesRef = firebase.database().ref('messages');
 		
-		// Fetch initial messages
-		firebaseRef.once('value').then(snapshot => {
-			const messages = Object.values(snapshot.val());
-			const messagesWithoutLastOne = messages.slice(0, messages.length - 1);
-			
-			// Set initial messages
-			this.setState({messages: messagesWithoutLastOne}, () => {
-				this.registerOnMessageAddedHandler()
-			});
-		})
+		const messagesPadding = this.props.match.params.padding;
+		
+		if (messagesPadding) {
+			messagesRef.limitToFirst(this.state.messagesPerPage * messagesPadding).once('value').then(snapshot => {
+				const messages = Object.values(snapshot.val());
+				this.setState({messages}, () => {
+					this.toggleLoadingMessages();
+				});
+			})
+		} else {
+			// Fetch initial messages
+			messagesRef.once('value').then(snapshot => {
+				const messages = Object.values(snapshot.val());
+				const messagesWithoutLastOne = messages.slice(0, messages.length - 1);
+				
+				// Set initial messages
+				this.setState({messages: messagesWithoutLastOne}, () => {
+					this.registerOnMessageAddedHandler();
+					this.toggleLoadingMessages();
+				});
+			})
+		}
 	}
 	
+	fetchNumberOfMessages = () => {
+		const chatInfoRef = firebase.database().ref('chatInfo');
+		
+		chatInfoRef.once('value').then(snapshot => {
+			const totalNumberOfMessages = snapshot.val().numberOfMessages;
+			
+			this.setState({totalNumberOfMessages});
+		})
+	};
+	
 	registerOnMessageAddedHandler() {
-		const firebaseRef = firebase.database().ref('messages');
+		const messagesRef = firebase.database().ref('messages');
 		
 		// Listen to new messages
-		firebaseRef.limitToLast(1).on('child_added', snapshot => {
+		messagesRef.limitToLast(1).on('child_added', snapshot => {
 			this.onMessageAdded(snapshot.val());
 		})
 	}
@@ -75,7 +102,6 @@ class Chat extends Component {
 		const oldMessages = [...this.state.messages];
 		this.setState({
 			messages: oldMessages.concat([message]),
-			loadingMessages: false
 		});
 	}
 	
@@ -88,8 +114,10 @@ class Chat extends Component {
 			timeAdded: new Date().getTime()
 		};
 		
+		const messagesRef = firebase.database().ref('message');
+		
 		// Send message to firebase database, clear the input and update user's counter to +1
-		firebase.database().ref('messages').push(dataToSend)
+		messagesRef.push(dataToSend)
 			.then(() => {
 				this.updateUsersMessageCounter();
 				this.setState({messageInput: ''});
@@ -99,6 +127,18 @@ class Chat extends Component {
 					message: 'Zpráva byla úspěšně odeslána',
 					level: 'success',
 					position: 'br'
+				})
+			})
+			.then(() => {
+				
+				// Update number of messages in the firebase database
+				const chatInfoRef = firebase.database().ref('chatInfo');
+				chatInfoRef.once('value').then(snapshot => {
+					const oldNumberOfMessages = snapshot.val().numberOfMessages;
+					
+					chatInfoRef.update({
+						numberOfMessages: oldNumberOfMessages + 1
+					});
 				})
 			});
 	};
@@ -164,6 +204,14 @@ class Chat extends Component {
 		return false;
 	}
 	
+	toggleLoadingMessages = () => {
+		this.setState({loadingMessages: false});
+	};
+	
+	onChangePagination = page => {
+		this.props.history.push(`/chat/${page}`)
+	};
+	
 	render() {
 		let messages = this.state.messages.map((message, index) => {
 			const typeOfMessage = message.author === this.state.loggedUser ? 'sent' : 'received';
@@ -187,21 +235,22 @@ class Chat extends Component {
 					userEmail={this.state.loggedUser}
 					onSignOut={this.onSignOut}
 				/>
-				<Container fluid>
 					<Loader
 						loaded={!this.state.loadingMessages}
 						options={{position: 'relative', top: '0'}}
 					>
-						<ChatWindow>
-							{messages}
-							<ChatInputPanel
-								messageChanged={this.messageChanged}
-								sendMessage={this.sendMessage}
-								message={this.state.messageInput}
-							/>
-						</ChatWindow>
+						<Container fluid>
+							<ChatWindow>
+								{messages}
+								<Pagination total={50} onChange={this.onChangePagination}/>
+								<ChatInputPanel
+									messageChanged={this.messageChanged}
+									sendMessage={this.sendMessage}
+									message={this.state.messageInput}
+								/>
+							</ChatWindow>
+						</Container>
 					</Loader>
-				</Container>
 				{this.state.openedUserDetails &&
 				<UserDetailModal
 					user={this.state.clickedUser}

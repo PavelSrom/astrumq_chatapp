@@ -51,7 +51,7 @@ class Login extends Component {
 	
 	render() {
 		return (
-			<div className="Login">
+			<div className="login">
 				<Header/>
 				<div className="container">
 					<Form
@@ -66,7 +66,7 @@ class Login extends Component {
 						<Input onChange={this.inputChanged} name="email" value={this.state.emailInput} type="text" placeholder="E-mail"/>
 						<Input onChange={this.inputChanged} name="password" value={this.state.passwordInput} type="password" placeholder="Password"/>
 						<Checkbox description="Zapamatovat přihlášení"/>
-						<Button color="danger">Přihlásit se</Button>
+						<Button className="form__button--to-black" color="danger">Přihlásit se</Button>
 					</Form>
 				</div>
 			</div>

@@ -2,12 +2,8 @@ import React from 'react';
 import logo from '../../images/logo_astrumq.png';
 
 const defaultHeader = () => {
-	return <header className="HeaderDefault">
-		<div className="container">
-			<div className="center">
-				<img src={logo} alt=""/>
-			</div>
-		</div>
+	return <header className="header header--default">
+		<img src={logo} alt=""/>
 	</header>
 };
 
