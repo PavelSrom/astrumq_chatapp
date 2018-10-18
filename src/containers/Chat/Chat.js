@@ -89,7 +89,7 @@ class Chat extends Component {
 			timeAdded: new Date().getTime()
 		};
 
-		const messagesRef = firebase.database().ref('message');
+		const messagesRef = firebase.database().ref('messages');
 
 		// Send message to firebase database, clear the input and update user's counter to +1
 		messagesRef.push(dataToSend)
