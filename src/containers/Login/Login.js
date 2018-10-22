@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import firebase from '../../fire';
-import Header from '../../components/default-header/DefaultHeader';
+import {connect} from 'react-redux';
+import {Alert} from 'reactstrap';
+import {Redirect} from 'react-router';
 import Form from '../../components/form/Form';
 import Input from '../../components/form/input/Input';
 import Checkbox from '../../components/form/checkbox/Checkbox';
 import Button from '../../components/form/button/Button';
+import {signIn} from '../../store/actions/authActions';
 
 class Login extends Component {
 	state = {
@@ -13,46 +15,27 @@ class Login extends Component {
 		passwordInput: ''
 	};
 	
-	componentDidMount() {
-		firebase.auth().onAuthStateChanged(user => {
-			if (user) {
-				this.props.history.push('/chat');
-			}
-		})
-	}
-	
 	inputChanged = event => {
 		const inputName = event.target.name + 'Input';
 		
 		this.setState({ [inputName]: event.target.value });
 	};
-	
-	checkForBlankInputs = () => {
-		let isValid = true;
-		
-		if (!this.state.emailInput) {
-			alert('Zadejte email');
-			isValid = false;
-		} else if (!this.state.passwordInput) {
-			alert('Zadejte heslo');
-			isValid = false;
-		}
-		
-		return isValid;
-	};
-	
+
 	onLogin = event => {
 		event.preventDefault();
-		if (this.checkForBlankInputs()){
-			firebase.auth().signInWithEmailAndPassword(this.state.emailInput, this.state.passwordInput)
-				.catch(error => alert(error.message));
-		}
+
+		const loginData = {
+			email: this.state.emailInput,
+			password: this.state.passwordInput
+		};
+
+		this.props.signIn(loginData);
 	};
 	
 	render() {
+		if (this.props.auth.uid) return <Redirect to="/chat"/>;
 		return (
 			<div className="login">
-				<Header/>
 				<div className="container">
 					<Form
 						header={
@@ -65,6 +48,9 @@ class Login extends Component {
 					>
 						<Input onChange={this.inputChanged} name="email" value={this.state.emailInput} type="text" placeholder="E-mail"/>
 						<Input onChange={this.inputChanged} name="password" value={this.state.passwordInput} type="password" placeholder="Password"/>
+						{this.props.loginError &&
+						<Alert color="danger">{this.props.loginError}</Alert>
+						}
 						<Checkbox description="Zapamatovat přihlášení"/>
 						<Button className="form__button--to-black" color="danger">Přihlásit se</Button>
 					</Form>
@@ -74,5 +60,16 @@ class Login extends Component {
 	}
 }
 
-export default Login;
+const mapStateToProps = state => ({
+	loginError: state.auth.loginError,
+	auth: state.firebase.auth
+});
+
+const mapDispatchToProps = dispatch => {
+	return {
+		signIn: (credentials) => dispatch(signIn(credentials))
+	}
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
 

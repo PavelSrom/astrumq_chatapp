@@ -19,7 +19,7 @@ const form = props => (
 
 form.propTypes = {
 	// Optional text that's under the avatar
-	header: PropTypes.string,
+	header: PropTypes.node,
 	submitted: PropTypes.func,
 	children: PropTypes.node
 };

@@ -1,47 +1,38 @@
 import React, {Component} from 'react';
-import {Route, Switch} from 'react-router-dom';
+import {BrowserRouter, Switch} from 'react-router-dom';
+import {Container} from 'reactstrap';
+import {connect} from 'react-redux';
+import Notifications from 'react-notification-system-redux';
 import Login from './containers/Login/Login';
-import Loader from 'react-loader';
-import firebase from './fire';
 import './App.sass';
 import Register from './containers/Register/Register';
 import Chat from './containers/Chat/Chat';
 import PrivateRoute from './hoc/PrivateRoute';
-import {Container} from 'reactstrap';
+import Header from './components/header/header';
+import RedirectIfLoggedInRoute from './hoc/RedirectIfLoggedInRoute';
 
 class App extends Component {
-	state = {
-		authUser: null,
-		isUserAuthenticated: false,
-		loading: true
-	};
-	
-	componentDidMount() {
-		firebase.auth().onAuthStateChanged(user => {
-			if (user) {
-				this.setState({authUser: user, isUserAuthenticated: true, loading: false});
-			} else {
-				this.setState({authUser: null, isUserAuthenticated: false, loading: false});
-			}
-		})
-	}
-	
 	render() {
 		return (
-			<div className="App">
-				<Container fluid>
-					<Loader loaded={!this.state.loading} color="#FF0000">
+			<BrowserRouter>
+				<div className="App">
+					<Header/>
+					<Container fluid>
 						<Switch>
-							<Route path="/" exact component={Login}/>
-							<Route path="/register" exact component={Register}/>
-							<PrivateRoute path="/chat" exact component={Chat}
-										  isUserAuthenticated={this.state.isUserAuthenticated}/>
+							<RedirectIfLoggedInRoute path="/" exact component={Login}/>
+							<RedirectIfLoggedInRoute path="/register" component={Register}/>
+							<PrivateRoute path="/chat" component={Chat}/>
 						</Switch>
-					</Loader>
-				</Container>
-			</div>
+						<Notifications notifications={this.props.notifications}/>
+					</Container>
+				</div>
+			</BrowserRouter>
 		);
 	}
 }
 
-export default App;
+const mapStateToProps = state => ({
+	notifications: state.notifications
+});
+
+export default connect(mapStateToProps)(App);

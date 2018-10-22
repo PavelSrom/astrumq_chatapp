@@ -1,138 +1,45 @@
 import React, {Component} from 'react';
 import Loader from 'react-loader';
-import uuid from 'uuid/v4';
-import NotificationSystem from 'react-notification-system';
 import {Container} from 'reactstrap';
+import {connect} from 'react-redux';
 import firebase from '../../fire';
-import ChatHeader from '../../components/chat-header/ChatHeader';
 import ChatWindow from '../../components/chat-window/ChatWindow';
 import ChatInputPanel from '../../components/chat-input-panel/ChatInputPanel';
 import ChatBubble from '../../components/chat-bubble/ChatBubble';
 import UserDetailModal from '../../components/user-detail-modal/UserDetailModal';
+import {loadInitialMessages, sendMessage} from '../../store/actions/chatActions';
+import {signOut} from '../../store/actions/authActions';
 
 class Chat extends Component {
 
 	state = {
-		loggedUser: null,
 		messageInput: '',
-		messages: [],
-		loadingMessages: true,
 		openedUserDetails: false,
 		clickedUser: null,
-		messagesPerPage: 10,
-		totalNumberOfMessages: 0
 	};
 
 	componentDidMount() {
-		this.notificationSystem = null;
-		this.checkForLoggedUser();
+		this.props.loadInitialMessages();
 	}
 
-	checkForLoggedUser() {
-		// Set logged user to state and register event handler for new messages
-		firebase.auth().onAuthStateChanged(currentUser => {
-			if (currentUser) {
-				this.setState({loggedUser: currentUser.email});
-				this.fetchMessages();
-			}
-		});
-	}
-
-	/*
-		* 7. Oct. 2018 6:40 PM - Changed logic of fetching initial messages.
-		
-		* - Use of .on('child_added') is inefficient, because if there is initially 10000 messages in the database
-		* then this event is called 10000x and it can lead to performance issues later.
-		
-		* Better solution is to fetch all messages by using .once('value'), remove last element
-		* and then register .on('child_added') limited to last element.
-	 */
-
-	fetchMessages() {
-		const messagesRef = firebase.database().ref('messages');
-		// Fetch initial messages
-		messagesRef.once('value').then(snapshot => {
-			const messages = Object.values(snapshot.val());
-			const messagesWithoutLastOne = messages.slice(0, messages.length - 1);
-
-			// Set initial messages
-			this.setState({messages: messagesWithoutLastOne}, () => {
-				this.registerOnMessageAddedHandler();
-				this.toggleLoadingMessages();
-			});
-		})
-	}
-
-	registerOnMessageAddedHandler() {
-		const messagesRef = firebase.database().ref('messages');
-
-		// Listen to new messages
-		messagesRef.limitToLast(1).on('child_added', snapshot => {
-			this.onMessageAdded(snapshot.val());
-		})
-	}
-
-	onMessageAdded(message) {
-		// Concat new messages with the old ones
-		const oldMessages = [...this.state.messages];
-		this.setState({
-			messages: oldMessages.concat([message]),
-		});
-	}
-
-	sendMessage = event => {
-		event.preventDefault();
+	sendMessage = () => {
 
 		const dataToSend = {
-			author: this.state.loggedUser,
+			author: this.props.auth.email,
 			text: this.state.messageInput,
 			timeAdded: new Date().getTime()
 		};
 
-		const messagesRef = firebase.database().ref('messages');
-
-		// Send message to firebase database, clear the input and update user's counter to +1
-		messagesRef.push(dataToSend)
-			.then(() => {
-				this.updateUsersMessageCounter();
-				this.setState({messageInput: ''});
-
-				// Send simple notification
-				this.notificationSystem.addNotification({
-					message: 'Zpráva byla úspěšně odeslána',
-					level: 'success',
-					position: 'br'
-				})
-			})
+		this.props.sendMessage(dataToSend);
+		this.setState({messageInput: ''})
 	};
 
-	updateUsersMessageCounter() {
-		firebase.database().ref('users').child(firebase.auth().currentUser.uid).once('value').then(snapshot => {
-			const currentUser = snapshot.val();
-			const messagesNumber = currentUser.messages;
-
-			firebase.database().ref('users').child(firebase.auth().currentUser.uid).update({
-				messages: messagesNumber + 1
-			})
-		});
-	}
+	detectEnterPress = (event) => {
+		if (event.key === 'Enter') this.sendMessage();
+	};
 
 	messageChanged = event => {
 		this.setState({messageInput: event.target.value});
-	};
-
-	onSignOut = () => {
-		firebase.auth().signOut()
-			.then(() => {
-				this.notificationSystem.addNotification({
-					message: 'Byli jste úspěšně odhlášeni',
-					level: 'info'
-				});
-				this.props.history.push('/')
-			})
-			.catch(error => {
-				alert(error.message);
-			})
 	};
 
 	getUserInfo = email => {
@@ -158,8 +65,8 @@ class Chat extends Component {
 
 	checkIfPreviousMessageHasSameSender(indexOfMessage) {
 		if (indexOfMessage > 0) {
-			const thisMessage = this.state.messages[indexOfMessage];
-			const previousMessage = this.state.messages[indexOfMessage - 1];
+			const thisMessage = this.props.chat.messages[indexOfMessage];
+			const previousMessage = this.props.chat.messages[indexOfMessage - 1];
 
 			return thisMessage.author === previousMessage.author;
 		}
@@ -167,18 +74,14 @@ class Chat extends Component {
 		return false;
 	}
 
-	toggleLoadingMessages = () => {
-		this.setState({loadingMessages: false});
-	};
-
 	render() {
-		let messages = this.state.messages.map((message, index) => {
-			const typeOfMessage = message.author === this.state.loggedUser ? 'sent' : 'received';
+		let messages = this.props.chat.messages.map((message, index) => {
+			const typeOfMessage = message.author === this.props.auth.email ? 'sent' : 'received';
 			const doesPreviousMessageHaveSameSender = this.checkIfPreviousMessageHasSameSender(index);
 
 			return (
 				<ChatBubble
-					key={uuid()}
+					key={message.timeAdded}
 					message={message}
 					type={typeOfMessage}
 					onGetUserInfo={this.getUserInfo}
@@ -189,20 +92,16 @@ class Chat extends Component {
 
 		return (
 			<div className="chat">
-				<NotificationSystem ref={el => this.notificationSystem = el}/>
-				<ChatHeader
-					userEmail={this.state.loggedUser}
-					onSignOut={this.onSignOut}
-				/>
 				<Loader
-					loaded={!this.state.loadingMessages}
-					options={{position: 'relative', top: '0'}}
+					loaded={!this.props.chat.chatIsLoading}
+					options={{position: 'relative'}}
 				>
 					<Container fluid>
 						<ChatWindow>
 							{messages}
 							<ChatInputPanel
 								messageChanged={this.messageChanged}
+								onKeyPress={this.detectEnterPress}
 								sendMessage={this.sendMessage}
 								message={this.state.messageInput}
 							/>
@@ -220,4 +119,18 @@ class Chat extends Component {
 	}
 }
 
-export default Chat;
+const mapStateToProps = state => {
+	return {
+		chat: state.chat,
+		auth: state.firebase.auth,
+		profile: state.firebase.profile
+	};
+};
+
+const mapDispatchToProps = dispatch => ({
+	sendMessage: message => dispatch(sendMessage(message)),
+	loadInitialMessages: () => dispatch(loadInitialMessages()),
+	signOut: () => dispatch(signOut())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chat);

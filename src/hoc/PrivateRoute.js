@@ -1,10 +1,12 @@
 import React from 'react';
-import {Redirect, Route} from 'react-router';
+import {Route} from 'react-router';
+import {Redirect} from 'react-router-dom';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
 const privateRoute = ({component: Component, ...rest}) => {
 	return (<Route {...rest} render={props => (
-		rest.isUserAuthenticated ?
+		rest.auth.uid ?
 			<Component {...props}/>
 			:
 			<Redirect to="/" />
@@ -16,4 +18,8 @@ privateRoute.propTypes = {
 	isUserAuthenticated: PropTypes.bool
 };
 
-export default privateRoute;
+const mapStateToProps = state => ({
+	auth: state.firebase.auth
+});
+
+export default connect(mapStateToProps)(privateRoute);

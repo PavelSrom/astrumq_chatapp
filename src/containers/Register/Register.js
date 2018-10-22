@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import {Container} from 'reactstrap';
-import firebase from '../../fire';
-import DefaultHeader from '../../components/default-header/DefaultHeader';
+import {Alert, Container} from 'reactstrap';
 import Form from '../../components/form/Form';
 import Input from '../../components/form/input/Input';
 import Button from '../../components/form/button/Button';
+import {connect} from 'react-redux';
+import {register} from '../../store/actions/authActions';
 
 class Register extends Component {
 	state = {
@@ -18,72 +18,21 @@ class Register extends Component {
 		
 		this.setState({[inputName]: event.target.value});
 	};
-	
-	checkForBlank = () => {
-		let isValid = true;
-		
-		if (!this.state.emailInput) {
-			alert('Zadejte email');
-			isValid = false;
-		}
-		else if (!this.state.passwordInput) {
-			alert('Zadejte heslo');
-			isValid = false;
-		}
-		else if (!this.state.passwordConfirmationInput) {
-			alert('Zadejte oveřovací heslo');
-			isValid = false;
-		}
-		
-		return isValid;
-	};
-	
-	passwordsMatch = () => {
-		if (this.state.passwordInput !== this.state.passwordConfirmationInput) {
-			alert('Ověřovací heslo není stejné');
-			return false;
-		}
-		
-		return true;
-	};
+
+	// TODO: Form validation
 	
 	onRegister = event => {
-		if (this.checkForBlank() && this.passwordsMatch()) {
-			const authData = {
-				email: this.state.emailInput,
-				password: this.state.passwordInput,
-			};
-			
-			firebase.auth().createUserWithEmailAndPassword(authData.email, authData.password)
-				.then(() => {
-					const currentUser = firebase.auth().currentUser;
-					
-					firebase.database().ref('users').child(currentUser.uid).set({
-						registrationTime: new Date().getTime(),
-						messages: 0,
-						email: authData.email
-					})
-				})
-				.catch(error => {
-					alert(error.message);
-				})
-		}
-		
 		event.preventDefault();
+		const authData = {
+			email: this.state.emailInput,
+			password: this.state.passwordInput,
+		};
+		this.props.register(authData);
 	};
-	
-	componentDidMount() {
-		firebase.auth().onAuthStateChanged(user => {
-			if (user) {
-				this.props.history.push('/chat');
-			}
-		})
-	}
-	
+
 	render() {
 		return (
 			<div className="registration">
-				<DefaultHeader/>
 				<Container>
 					<Form submitted={this.onRegister}>
 						<Input
@@ -104,6 +53,9 @@ class Register extends Component {
 							name="passwordConfirmation"
 							placeholder="Potvrzení hesla"
 						/>
+						{this.props.registrationError &&
+						<Alert color="danger">{this.props.registrationError}</Alert>
+						}
 						<Button className="form__button--to-black" color="danger">Zaregistrovat</Button>
 					</Form>
 				</Container>
@@ -112,4 +64,12 @@ class Register extends Component {
 	}
 }
 
-export default Register;
+const mapStateToProps = state => ({
+	registrationError: state.auth.registrationError
+});
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+	register: (credentials) => dispatch(register(credentials, ownProps))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register);

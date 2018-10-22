@@ -9,6 +9,7 @@ const chatInputPanel = props => (
 			type="textarea" placeholder="Vaše odpověď"
 			onChange={props.messageChanged}
 			value={props.message}
+			onKeyPress={props.onKeyPress}
 		/>
 		<Button
 			color="danger"
