@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Alert, Container} from 'reactstrap';
-import Form from '../../components/form/Form';
-import Input from '../../components/form/input/Input';
-import Button from '../../components/form/button/Button';
+import Form from '../../components/form/form';
+import Input from '../../components/form/input/input';
+import Button from '../../components/form/button/button';
 import {connect} from 'react-redux';
 import {register} from '../../store/actions/authActions';
 

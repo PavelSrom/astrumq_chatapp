@@ -20,8 +20,8 @@ class App extends Component {
 					<Container fluid>
 						<Switch>
 							<RedirectIfLoggedInRoute path="/" exact component={Login}/>
-							<RedirectIfLoggedInRoute path="/register" component={Register}/>
-							<PrivateRoute path="/chat" component={Chat}/>
+							<RedirectIfLoggedInRoute path="/register" exact component={Register}/>
+							<PrivateRoute path="/chat/:page(\d+)?" exact component={Chat}/>
 						</Switch>
 						<Notifications notifications={this.props.notifications}/>
 					</Container>

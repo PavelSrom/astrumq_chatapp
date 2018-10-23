@@ -2,13 +2,15 @@ import React, {Component} from 'react';
 import Loader from 'react-loader';
 import {Container} from 'reactstrap';
 import {connect} from 'react-redux';
+import Pagination from 'rc-pagination';
 import firebase from '../../fire';
-import ChatWindow from '../../components/chat-window/ChatWindow';
-import ChatInputPanel from '../../components/chat-input-panel/ChatInputPanel';
-import ChatBubble from '../../components/chat-bubble/ChatBubble';
+import ChatWindow from '../../components/chat-window/chat-window';
+import ChatInputPanel from '../../components/chat-input-panel/chat-input-panel';
+import ChatBubble from '../../components/chat-bubble/chat-bubble';
 import UserDetailModal from '../../components/user-detail-modal/UserDetailModal';
 import {loadInitialMessages, sendMessage} from '../../store/actions/chatActions';
 import {signOut} from '../../store/actions/authActions';
+import 'rc-pagination/dist/rc-pagination.min.css';
 
 class Chat extends Component {
 
@@ -63,21 +65,48 @@ class Chat extends Component {
 		this.setState({openedUserDetails: false});
 	};
 
-	checkIfPreviousMessageHasSameSender(indexOfMessage) {
+	checkIfPreviousMessageHasSameSender(messageTime, indexInCurrentPage) {
+		// First message each page should be always rendered with avatar
+		if (indexInCurrentPage === 0) return false;
+
+		const matchingMessage = this.props.chat.messages.find(message => message.timeAdded === messageTime);
+		const indexOfMessage = this.props.chat.messages.indexOf(matchingMessage);
+
 		if (indexOfMessage > 0) {
 			const thisMessage = this.props.chat.messages[indexOfMessage];
 			const previousMessage = this.props.chat.messages[indexOfMessage - 1];
-
 			return thisMessage.author === previousMessage.author;
 		}
 
 		return false;
 	}
 
+	onPageChanged = current => {
+		this.props.history.push(`/chat/${current}`);
+	};
+
 	render() {
-		let messages = this.props.chat.messages.map((message, index) => {
+		// All params are accepted as string, so we need to parse it to int
+		const currentPage = this.props.match.params.page ? parseInt(this.props.match.params.page) : 1;
+		const numberOfMessages = this.props.chat.messages.length;
+		const pageSize = this.props.messagesPerPage;
+
+		// All fetched messages
+		let messages = this.props.chat.messages;
+
+		// If page is specified in params, then slice messages to required range
+		if (currentPage) {
+			// Index of starting message
+			const startFrom = (currentPage - 1) * pageSize;
+			// Index of ending message
+			const endAt = (currentPage - 1) * pageSize + pageSize;
+
+			messages = this.props.chat.messages.slice(startFrom, endAt);
+		}
+
+		const messagesToShow = messages.map((message, indexInCurrentPage) => {
 			const typeOfMessage = message.author === this.props.auth.email ? 'sent' : 'received';
-			const doesPreviousMessageHaveSameSender = this.checkIfPreviousMessageHasSameSender(index);
+			const doesPreviousMessageHaveSameSender = this.checkIfPreviousMessageHasSameSender(message.timeAdded, indexInCurrentPage);
 
 			return (
 				<ChatBubble
@@ -98,7 +127,13 @@ class Chat extends Component {
 				>
 					<Container fluid>
 						<ChatWindow>
-							{messages}
+							{messagesToShow}
+							<Pagination
+								total={numberOfMessages}
+								pageSize={pageSize}
+								onChange={this.onPageChanged}
+								current={currentPage}
+							/>
 							<ChatInputPanel
 								messageChanged={this.messageChanged}
 								onKeyPress={this.detectEnterPress}
@@ -123,14 +158,15 @@ const mapStateToProps = state => {
 	return {
 		chat: state.chat,
 		auth: state.firebase.auth,
-		profile: state.firebase.profile
+		profile: state.firebase.profile,
+		messagesPerPage: state.chat.messagesPerPage
 	};
 };
 
 const mapDispatchToProps = dispatch => ({
 	sendMessage: message => dispatch(sendMessage(message)),
 	loadInitialMessages: () => dispatch(loadInitialMessages()),
-	signOut: () => dispatch(signOut())
+	signOut: () => dispatch(signOut()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Chat);

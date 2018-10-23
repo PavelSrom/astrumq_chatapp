@@ -1,6 +1,7 @@
 const initialState = {
 	messages: [],
-	chatIsLoading: true
+	chatIsLoading: true,
+	messagesPerPage: 5
 };
 
 const chatReducer = (state = initialState, action) => {

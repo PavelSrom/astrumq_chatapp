@@ -32,10 +32,9 @@ export const sendMessage = message => {
 };
 
 export const loadInitialMessages = () => {
-	return (dispatch, getState, {getFirebase,}) => {
+	return (dispatch, getState, {getFirebase}) => {
 		const messagesRef = getFirebase().database().ref('messages');
-
-		messagesRef.once('value').then(snapshot => {
+		messagesRef.orderByChild('timeAdded').once('value').then(snapshot => {
 			let messages;
 
 			//	Check if there are some messages, if so, cut length by 1, because last message will be added by on('child_added')
@@ -48,10 +47,16 @@ export const loadInitialMessages = () => {
 
 			dispatch({type: 'SET_INITIAL_MESSAGES', payload: {messages}})
 		}).then(() => {
-			getFirebase().database().ref('messages').limitToLast(1).on('child_added', snapshot => {
-				const message = snapshot.val();
-				dispatch({type: 'ADD_NEW_MESSAGE', payload: {message}});
-			})
-		});
+			dispatch(registerNewMessageListener());
+		})
+	}
+};
+
+const registerNewMessageListener = () => {
+	return (dispatch, getState, {getFirebase}) => {
+		getFirebase().database().ref('messages').limitToLast(1).on('child_added', snapshot => {
+			const message = snapshot.val();
+			dispatch({type: 'ADD_NEW_MESSAGE', payload: {message}});
+		})
 	}
 };

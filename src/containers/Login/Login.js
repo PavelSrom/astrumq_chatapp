@@ -3,10 +3,10 @@ import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {Alert} from 'reactstrap';
 import {Redirect} from 'react-router';
-import Form from '../../components/form/Form';
-import Input from '../../components/form/input/Input';
-import Checkbox from '../../components/form/checkbox/Checkbox';
-import Button from '../../components/form/button/Button';
+import Form from '../../components/form/form';
+import Input from '../../components/form/input/input';
+import Checkbox from '../../components/form/checkbox/checkbox';
+import Button from '../../components/form/button/button';
 import {signIn} from '../../store/actions/authActions';
 
 class Login extends Component {
