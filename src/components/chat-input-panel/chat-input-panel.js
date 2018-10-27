@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Button, Input} from 'reactstrap';
+import { Button, Input } from 'reactstrap';
 
 const chatInputPanel = props => (
-	<div className="chatInputPanel">
+	<div className="chat-input-panel">
 		<Input
-			className="chatInputPanel__textarea"
+			className="chat-input-panel__textarea"
 			type="textarea" placeholder="Vaše odpověď"
 			onChange={props.messageChanged}
 			value={props.message}
@@ -13,7 +13,7 @@ const chatInputPanel = props => (
 		/>
 		<Button
 			color="danger"
-			className="chatInputPanel__button"
+			className="chat-input-panel__button"
 			onClick={props.sendMessage}
 		>
 			Odeslat
@@ -29,7 +29,7 @@ chatInputPanel.propTypes = {
 	sendMessage: PropTypes.func,
 	
 	// Handler that changes current input value
-	messageChanged: PropTypes.func
+	messageChanged: PropTypes.func,
 };
 
 export default chatInputPanel;

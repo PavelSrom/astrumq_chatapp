@@ -1,25 +1,28 @@
-import React, {Component} from 'react';
-import {Alert, Container} from 'reactstrap';
+import React, { Component } from 'react';
+import { Alert, Container } from 'reactstrap';
 import Form from '../../components/form/form';
 import Input from '../../components/form/input/input';
 import Button from '../../components/form/button/button';
-import {connect} from 'react-redux';
-import {register} from '../../store/actions/authActions';
+import { connect } from 'react-redux';
+import { register } from '../../store/actions/authActions';
+import { translateMessage } from '../../utils/translation';
 
 class Register extends Component {
 	state = {
 		emailInput: '',
 		passwordInput: '',
-		passwordConfirmationInput: ''
+		passwordConfirmationInput: '',
 	};
 	
 	inputChanged = event => {
 		const inputName = event.target.name + 'Input';
-		
-		this.setState({[inputName]: event.target.value});
+
+		this.setState({ [inputName]: event.target.value });
 	};
 
-	// TODO: Form validation
+	passwordsMatch = () => {
+		return this.state.passwordInput === this.state.passwordConfirmationInput;
+	};
 	
 	onRegister = event => {
 		event.preventDefault();
@@ -27,10 +30,19 @@ class Register extends Component {
 			email: this.state.emailInput,
 			password: this.state.passwordInput,
 		};
+
+		if (!this.passwordsMatch()) {
+			this.props.throwRegistrationError('Hesla se neshodují.');
+			return;
+		}
 		this.props.register(authData);
 	};
 
 	render() {
+		const {
+			registrationError,
+		} = this.props;
+
 		return (
 			<div className="registration">
 				<Container>
@@ -53,8 +65,8 @@ class Register extends Component {
 							name="passwordConfirmation"
 							placeholder="Potvrzení hesla"
 						/>
-						{this.props.registrationError &&
-						<Alert color="danger">{this.props.registrationError}</Alert>
+						{registrationError &&
+						<Alert color="danger">{translateMessage(registrationError)}</Alert>
 						}
 						<Button className="form__button--to-black" color="danger">Zaregistrovat</Button>
 					</Form>
@@ -65,11 +77,19 @@ class Register extends Component {
 }
 
 const mapStateToProps = state => ({
-	registrationError: state.auth.registrationError
+	registrationError: state.auth.registrationError,
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-	register: (credentials) => dispatch(register(credentials, ownProps))
+	register: (credentials) => dispatch(register(credentials, ownProps)),
+	throwRegistrationError: errorMessage => dispatch({
+		type: 'REGISTER_ERROR',
+		payload: {
+			err: {
+				message: errorMessage,
+			},
+		},
+	}),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Register);

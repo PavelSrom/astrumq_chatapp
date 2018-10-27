@@ -1,7 +1,7 @@
 const initialState = {
 	messages: [],
 	chatIsLoading: true,
-	messagesPerPage: 5
+	messagesPerPage: 5,
 };
 
 const chatReducer = (state = initialState, action) => {
@@ -9,14 +9,14 @@ const chatReducer = (state = initialState, action) => {
 		case 'ADD_NEW_MESSAGE':
 			return {
 				...state,
-				messages: state.messages.concat([action.payload.message])
+				messages: state.messages.concat([action.payload.message]),
 			};
 
 		case 'SET_INITIAL_MESSAGES':
 			return {
 				...state,
 				messages: action.payload.messages,
-				chatIsLoading: false
+				chatIsLoading: false,
 			};
 
 		default:

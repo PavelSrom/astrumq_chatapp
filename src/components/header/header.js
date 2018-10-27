@@ -1,20 +1,18 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
-import logo from '../../images/logo_astrumq.png';
-import avatar from '../../images/avatar.png';
-import logout from '../../images/logout.png';
-import {signOut} from '../../store/actions/authActions';
-import {withRouter} from 'react-router';
+import { signOut } from '../../store/actions/authActions';
+import { withRouter } from 'react-router';
 
 const header = props => {
-	const headerClassNames = classNames(
-		'header',
-		{
-			'header--default': !props.auth.uid,
-			'header--chat': props.auth.uid
-		}
-	);
+	const logo = '/images/logo_astrumq.png';
+	const avatar = '/images/avatar.png';
+	const logout = '/images/logout.png';
+
+	const {
+		uid,
+		email,
+	} = props.auth;
 
 	let headerContent = null;
 
@@ -26,7 +24,7 @@ const header = props => {
 				</div>
 				<div>
 					<img src={avatar} alt=""/>
-					<span>{props.auth.email}</span>
+					<span>{email}</span>
 					<img className="chatHeader__logoutIcon" src={logout} onClick={props.signOut}/>
 				</div>
 			</React.Fragment>
@@ -36,18 +34,23 @@ const header = props => {
 	}
 
 	return (
-		<header className={headerClassNames}>
+		<header className={
+			classNames({
+				'header': true,
+				'header--default': !uid,
+				'header--chat': uid,
+			})}>
 			{headerContent}
 		</header>
 	)
 };
 
 const mapStateToProps = state => ({
-	auth: state.firebase.auth
+	auth: state.firebase.auth,
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-	signOut: () => dispatch(signOut(ownProps))
+	signOut: () => dispatch(signOut(ownProps)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(header));

@@ -1,8 +1,8 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {Redirect, Route} from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Redirect, Route } from 'react-router-dom';
 
-const redirectIfLoggedInRoute = ({component: Component, ...rest}) => {
+const redirectIfLoggedInRoute = ({ component: Component, ...rest }) => {
 	return (
 		<Route {...rest} render={props => (
 			rest.auth.uid ?
@@ -14,7 +14,7 @@ const redirectIfLoggedInRoute = ({component: Component, ...rest}) => {
 };
 
 const mapStateToProps = state => ({
-	auth: state.firebase.auth
+	auth: state.firebase.auth,
 });
 
 export default connect(mapStateToProps)(redirectIfLoggedInRoute);

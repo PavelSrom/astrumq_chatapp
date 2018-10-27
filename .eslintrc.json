@@ -30,6 +30,18 @@
     "quotes": [
       "warn",
       "single"
+    ],
+    "comma-dangle": [
+      "error",
+      "always-multiline"
+    ],
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "eqeqeq": [
+      "error",
+      "always"
     ]
   },
   "parser": "babel-eslint",

@@ -9,6 +9,7 @@
     "dayjs": "^1.7.7",
     "firebase": "^5.5.2",
     "node-sass": "^4.9.4",
+    "node-sass-chokidar": "^1.3.4",
     "prop-types": "^15.6.2",
     "rc-pagination": "^1.17.3",
     "react": "^16.5.2",
@@ -23,13 +24,21 @@
     "reactstrap": "^6.5.0",
     "redux-firestore": "^0.5.8",
     "redux-thunk": "^2.3.0",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "npm-run-all --parallel watch-css start-js",
+    "build": "npm-run-all build-css build-js",
+    "deploy": "firebase deploy",
+    "build-and-deploy": "npm-run-all build deploy",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start-js": "react-scripts start",
+    "watch-css": "node-sass-chokidar src/styles/index.scss public/css/index.min.css --output-style=compressed --watch",
+    "build-css": "node-sass-chokidar src/styles/index.scss public/css/index.min.css --output-style=compressed",
+    "build-js": "react-scripts build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -43,8 +52,6 @@
   "devDependencies": {
     "babel-eslint": "^9.0.0",
     "eslint": "5.6.0",
-    "eslint-plugin-react": "^7.11.1",
-    "react-redux": "^5.0.7",
-    "redux": "^4.0.1"
+    "eslint-plugin-react": "^7.11.1"
   }
 }

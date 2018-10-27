@@ -1,11 +1,18 @@
+import { success } from 'react-notification-system-redux';
+
 export const sendMessage = message => {
-	return (dispatch, getState, {getFirebase}) => {
+	return (dispatch, getState, { getFirebase }) => {
 		const database = getFirebase().database();
 
 		// ! Need transaction for this
 
 		// Push new message to the database
-		database.ref('messages').push({...message});
+		database.ref('messages').push({ ...message }).then(() => {
+			dispatch(success({
+				title: 'Vaše zpráva byla úspěšně odeslána',
+				position: 'br',
+			}))
+		});
 
 		// Increase users messages counter
 		const loggedUserUID = getState().firebase.auth.uid;
@@ -14,7 +21,7 @@ export const sendMessage = message => {
 			const userProfile = snapshot.val();
 			database.ref(`users/${loggedUserUID}`).update({
 				...userProfile,
-				messages: userProfile.messages + 1
+				messages: userProfile.messages + 1,
 			})
 		});
 
@@ -25,14 +32,14 @@ export const sendMessage = message => {
 
 			database.ref('chatInfo').update({
 				...oldValues,
-				numberOfMessages: oldValues.numberOfMessages + 1
+				numberOfMessages: oldValues.numberOfMessages + 1,
 			})
 		});
 	}
 };
 
 export const loadInitialMessages = () => {
-	return (dispatch, getState, {getFirebase}) => {
+	return (dispatch, getState, { getFirebase }) => {
 		const messagesRef = getFirebase().database().ref('messages');
 		messagesRef.orderByChild('timeAdded').once('value').then(snapshot => {
 			let messages;
@@ -45,7 +52,7 @@ export const loadInitialMessages = () => {
 				messages = [];
 			}
 
-			dispatch({type: 'SET_INITIAL_MESSAGES', payload: {messages}})
+			dispatch({ type: 'SET_INITIAL_MESSAGES', payload: { messages } })
 		}).then(() => {
 			dispatch(registerNewMessageListener());
 		})
@@ -53,10 +60,10 @@ export const loadInitialMessages = () => {
 };
 
 const registerNewMessageListener = () => {
-	return (dispatch, getState, {getFirebase}) => {
+	return (dispatch, getState, { getFirebase }) => {
 		getFirebase().database().ref('messages').limitToLast(1).on('child_added', snapshot => {
 			const message = snapshot.val();
-			dispatch({type: 'ADD_NEW_MESSAGE', payload: {message}});
+			dispatch({ type: 'ADD_NEW_MESSAGE', payload: { message } });
 		})
 	}
 };

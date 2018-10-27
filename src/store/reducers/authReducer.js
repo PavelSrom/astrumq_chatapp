@@ -1,5 +1,5 @@
 const initialState = {
-	loginError: null
+	loginError: null,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -7,30 +7,34 @@ const authReducer = (state = initialState, action) => {
 		case 'LOGIN_SUCCESS':
 			return {
 				...state,
-				loginError: null
+				loginError: null,
 			};
 
 		case 'LOGIN_ERROR':
 			return {
 				...state,
-				loginError: action.payload.err.message
+				loginError: action.payload.err.message,
 			};
 
 		case 'SIGN_OUT_SUCCESS':
+			return {
+				...state,
+			};
+
 		case 'SIGN_OUT_ERROR':
 			return {
-				...state
+				...state,
 			};
 
 		case 'REGISTER_SUCCESS':
 			return {
-				...state
+				...state,
 			};
 
 		case 'REGISTER_ERROR':
 			return {
 				...state,
-				registrationError: action.payload.err.message
+				registrationError: action.payload.err.message,
 			};
 
 		default:

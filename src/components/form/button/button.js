@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, FormGroup} from 'reactstrap';
+import { Button, FormGroup } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 const button = props => (
