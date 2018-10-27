@@ -1,0 +1,6 @@
+REACT_APP_API_KEY='AIzaSyD0TKqnYA2ovCfkW-ZR7crIAUENLzSlQGM'
+REACT_APP_AUTH_DOMAIN='astrumq-chatapp.firebaseapp.com'
+REACT_APP_DATABASE_URL='https://astrumq-chatapp.firebaseio.com'
+REACT_APP_PROJECT_ID='astrumq-chatapp'
+REACT_APP_STORAGE_BUCKET='astrumq-chatapp.appspot.com'
+REACT_APP_MESSAGING_SENDER_ID='192326594300'
